@@ -54,4 +54,10 @@ void ToneTest::log(){
  * === wuerfel ===
  * 3250	3		32000	-3		boing (druck)
  * 3250	600	32000	-12	zisch (loslassen)
+ * === music ===
+ * 500	-1		32000	-80	bassdrum
+ * 6250	10000	20000	-150	closed hi
+ * 6250	10000	20000	-20	open hi
+ * 6250	10000	32000	-40	snare
+ * 4000	-2		32000	-10	quaak
  */
