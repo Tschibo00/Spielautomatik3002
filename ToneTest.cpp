@@ -14,49 +14,33 @@ ToneTest::ToneTest(DisplayController *dc, KeyboardController *kc, SoundControlle
 }
 
 void ToneTest::play() {
-	char select = kc->getNumberStatus();
 	dc->clear(0);
 
-	if (select >= 0) {
-		switch (select) {
-		case 0:
-			sc->tone(0,0,0,0);
-			break;
-		case 1:
-			dc->showNumber(13);
-			break;
-		case 2:
-			dc->showNumber(471);
-			break;
-		case 3:
-			dc->showNumber(8935);
-			break;
-		case 4:
-			dc->showNumber(32767);
-			break;
-		case 5:
-			dc->showNumber(-9);
-			break;
-		case 6:
-			dc->showNumber(-12);
-			break;
-		case 7:
-			dc->showNumber(-128);
-			break;
-		case 8:
-			dc->showNumber(-3284);
-			break;
-		case 9:
-			dc->showNumber(-32000);
-			break;
-		case 10:
-			break;
-		case 11:
-			sc->tone(7000,10000,-4,-1);
-			break;
-		}
-//		dc->screen[(select%3)+(select/3)*4] = 15;
-	}
+	if (kc->getKeyClick(0))freq-=100;
+	if (kc->getKeyClick(1))freq=3000;
+	if (kc->getKeyClick(2))freq+=100;
+
+	if (kc->getKeyClick(3))freqDelta-=1;
+	if (kc->getKeyClick(4))freqDelta-=10;
+	if (kc->getKeyClick(5))freqDelta-=100;
+	if (kc->getKeyClick(6))freqDelta+=1;
+	if (kc->getKeyClick(7))freqDelta+=10;
+	if (kc->getKeyClick(8))freqDelta+=100;
+
+	char select=kc->getNumberStatus();
+	if ((select>=0)&&(select<3))dc->showNumber(freq);
+	if ((select>=3)&&(select<9))dc->showNumber(freqDelta);
+
+	if(kc->getKeyClick(9)){sc->tone(freq, 32000, freqDelta, -8);log();}
+	if(kc->getKeyClick(10)){sc->tone(freq, 32000, freqDelta, -3);log();}
+	if(kc->getKeyClick(11)){sc->tone(0,0,0,0);log();}
 
 	dc->flipBuffer();
+}
+
+void ToneTest::log(){
+	Serial.print("freq: ");
+	Serial.print(freq);
+	Serial.print(" delta ");
+	Serial.println(freqDelta);
 }

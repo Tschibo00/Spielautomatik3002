@@ -52,6 +52,8 @@ void setup() {
 	TCCR2B = TCCR2B & B11111000 | B00000001;    // set timer 2 divisor to     1 for PWM frequency of 31372.55 Hz
 
 	BatteryMonitor::checkAndShow(dc);
+
+	Serial.begin(115200);
 }
 
 ISR(TIMER1_COMPA_vect) {
