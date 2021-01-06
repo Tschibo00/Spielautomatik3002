@@ -32,8 +32,8 @@ void AsteroidGame::play() {
 	if ((kc->getKeyClick(10)) && (bulletY < 0)) {
 		bulletX = playerPos;
 		bulletY = 3;
-		bulletWait = millis() + BULLETSPEED
-		;
+		bulletWait = millis() + BULLETSPEED;
+		sc->tone(10250, 32000, -3, -15);
 	}
 	dc->screen[16 + playerPos] = 15;
 	if ((bulletY >= 0) && (bulletX >= 0)) {
@@ -43,6 +43,7 @@ void AsteroidGame::play() {
 	if (asteroids[bulletY * 4 + bulletX] > 0) {
 		asteroids[bulletY * 4 + bulletX] -= 127;
 		bulletY = -1;
+		sc->tone(10000, 32000, -3400, -8);
 	}
 
 	if ((bulletY >= 0) && (millis() >= bulletWait)) {
