@@ -11,6 +11,12 @@
 #include "Game.h"
 
 class ToneTest: public Game {
+private:
+	int16_t freq=2000;
+	int16_t amp=20000;
+	int16_t freqDelta=0;
+	int16_t ampDelta=0;
+
 protected:
 	uint8_t icon[20] = { 0,0,0,15,7,1,15,15,15,15,15,15,7,1,15,15,0,0,0,15 };
 public:

@@ -47,11 +47,28 @@ void DisplayController::clear(uint8_t color) {
 }
 
 void DisplayController::copy(const uint8_t *source) {
-	copy((const char*)source);
+	copy((const char*) source);
 }
 
 void DisplayController::copy(const char *source) {
 	for (uint8_t i = 0; i < 20; i++)
 		if ((source[i] >= 0) && (source[i] < 16))
 			screen[i] = source[i];
+}
+
+void DisplayController::showDigit(char row, char number) {
+	bool negative = (number < 0);
+	if (number < 0)
+		number = -number;
+	for (char i = 0; i < 4; i++) {
+		screen[i + row * 4] = (number & 1) * (negative ? 2 : 15);
+		number = number >> 1;
+	}
+}
+
+void DisplayController::showNumber(int number) {
+	for (char i = 0; i < 5; i++) {
+		showDigit(4 - i, number % 10);
+		number /= 10;
+	}
 }

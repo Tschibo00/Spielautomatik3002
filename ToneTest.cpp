@@ -23,30 +23,39 @@ void ToneTest::play() {
 			sc->tone(0,0,0,0);
 			break;
 		case 1:
+			dc->showNumber(13);
 			break;
 		case 2:
+			dc->showNumber(471);
 			break;
 		case 3:
+			dc->showNumber(8935);
 			break;
 		case 4:
+			dc->showNumber(32767);
 			break;
 		case 5:
+			dc->showNumber(-9);
 			break;
 		case 6:
+			dc->showNumber(-12);
 			break;
 		case 7:
+			dc->showNumber(-128);
 			break;
 		case 8:
+			dc->showNumber(-3284);
 			break;
 		case 9:
-			sc->tone(7000,10000,-4,-1);
+			dc->showNumber(-32000);
 			break;
 		case 10:
 			break;
 		case 11:
+			sc->tone(7000,10000,-4,-1);
 			break;
 		}
-		dc->screen[(select%3)+(select/3)*4] = 15;
+//		dc->screen[(select%3)+(select/3)*4] = 15;
 	}
 
 	dc->flipBuffer();

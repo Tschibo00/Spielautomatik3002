@@ -21,5 +21,7 @@ public:
 	void clear(uint8_t color);
 	void copy(const uint8_t *source);
 	void copy(const char *source);
+	void showDigit(char row,char number);
+	void showNumber(int number);
 };
 #endif
