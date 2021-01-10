@@ -13,13 +13,16 @@
 class LabyrinthGame: public Game {
 private:
 	char *labyrinth = NULL;
-	int sizeX = 3;
-	int sizeY = 3;
+	int sizeX = 5;
+	int sizeY = 5;
 	void set(int x, int y) {
-		labyrinth[y * sizeX + x] = 1;
+		set(x, y, 1);
+	}
+	void set(int x, int y, char color) {
+		labyrinth[y * sizeX + x] = color;
 	}
 	void clear(int x, int y) {
-		labyrinth[y * sizeX + x] = 0;
+		set(x, y, 0);
 	}
 	char get(int x, int y) {
 		return labyrinth[y * sizeX + x];
@@ -27,9 +30,10 @@ private:
 
 	//player
 	int posX, posY;
+	bool showHints = false;
 
 	char victoryScreen[20] = { 0, 0, 15, 15, 0, 0, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15 };
-	char victoryMusic[5]={13,PAUSE,13,13,18};
+	char victoryMusic[5] = { 13, PAUSE, 13, 13, 18 };
 
 	void showScreen(char *screen);
 

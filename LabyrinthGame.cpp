@@ -81,25 +81,28 @@ void LabyrinthGame::play() {
 	if (labyrinth == NULL)
 		generate(sizeX, sizeY);
 
-	if (kc->getKeyClick(1) && (get(posX, posY - 1) == 0)) {
+	if (kc->getKeyClick(4))
+		showHints=!showHints;
+
+	if (kc->getKeyClick(1) && (get(posX, posY - 1) !=1)) {
 		if (posY > 0) {
 			posY--;
 			sc->noise(rand() % 1700 + 200, 170, 0, -4);
 		}
 	}
-	if (kc->getKeyClick(3) && (get(posX - 1, posY) == 0)) {
+	if (kc->getKeyClick(3) && (get(posX - 1, posY) !=1)) {
 		if (posX > 0) {
 			posX--;
 			sc->noise(rand() % 1700 + 200, 170, 0, -4);
 		}
 	}
-	if (kc->getKeyClick(5) && (get(posX + 1, posY) == 0)) {
+	if (kc->getKeyClick(5) && (get(posX + 1, posY) !=1)) {
 		if (posX < sizeX - 1) {
 			posX++;
 			sc->noise(rand() % 1700 + 200, 170, 0, -4);
 		}
 	}
-	if (kc->getKeyClick(7) && (get(posX, posY + 1) == 0)) {
+	if (kc->getKeyClick(7) && (get(posX, posY + 1) !=1)) {
 		if (posY < sizeY - 1) {
 			posY++;
 			sc->noise(rand() % 1700 + 200, 170, 0, -4);
@@ -108,11 +111,25 @@ void LabyrinthGame::play() {
 
 	for (int y = -2; y < 3; y++)
 		for (int x = -2; x < 2; x++)
-			if ((y + posY >= 0) && (y + posY < sizeY) && (x + posX >= 0) && (x + posX < sizeX))
-				dc->screen[x + 2 + (y + 2) * 4] = get(x + posX, y + posY) * 15;
-			else
+			if ((y + posY >= 0) && (y + posY < sizeY) && (x + posX >= 0) && (x + posX < sizeX)) {
+				switch (get(x + posX, y + posY)) {
+				case 0:
+					dc->screen[x + 2 + (y + 2) * 4] = 0;
+					break;
+				case 1:
+					dc->screen[x + 2 + (y + 2) * 4] = 15;
+					break;
+				case 2:
+					if (showHints)
+						dc->screen[x + 2 + (y + 2) * 4] = 1;
+					else
+						dc->screen[x + 2 + (y + 2) * 4] = 0;
+					break;
+				}
+			} else
 				dc->screen[x + 2 + (y + 2) * 4] = 0;			//outside of labyrinth
-	dc->screen[10] = (millis()/100)%3+1;						//player
+	dc->screen[10] = (millis() / 100) % 3 + 1;				//player
+	set(posX,posY,2);
 
 	if (posY == 0) {
 		sc->music(victoryMusic, 5, 130, 600, -4);
