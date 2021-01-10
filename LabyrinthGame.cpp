@@ -84,25 +84,25 @@ void LabyrinthGame::play() {
 	if (kc->getKeyClick(1) && (get(posX, posY - 1) == 0)) {
 		if (posY > 0) {
 			posY--;
-			sc->noise(rand() % 700 + 200, 150, 0, -5);
+			sc->noise(rand() % 1700 + 200, 170, 0, -4);
 		}
 	}
 	if (kc->getKeyClick(3) && (get(posX - 1, posY) == 0)) {
 		if (posX > 0) {
 			posX--;
-			sc->noise(rand() % 700 + 200, 150, 0, -5);
+			sc->noise(rand() % 1700 + 200, 170, 0, -4);
 		}
 	}
 	if (kc->getKeyClick(5) && (get(posX + 1, posY) == 0)) {
 		if (posX < sizeX - 1) {
 			posX++;
-			sc->noise(rand() % 700 + 200, 150, 0, -5);
+			sc->noise(rand() % 1700 + 200, 170, 0, -4);
 		}
 	}
 	if (kc->getKeyClick(7) && (get(posX, posY + 1) == 0)) {
 		if (posY < sizeY - 1) {
 			posY++;
-			sc->noise(rand() % 700 + 200, 150, 0, -5);
+			sc->noise(rand() % 1700 + 200, 170, 0, -4);
 		}
 	}
 
@@ -112,7 +112,7 @@ void LabyrinthGame::play() {
 				dc->screen[x + 2 + (y + 2) * 4] = get(x + posX, y + posY) * 15;
 			else
 				dc->screen[x + 2 + (y + 2) * 4] = 0;			//outside of labyrinth
-	dc->screen[10] = 2;												//player
+	dc->screen[10] = (millis()/100)%3+1;						//player
 
 	if (posY == 0) {
 		sc->music(victoryMusic, 5, 130, 600, -4);
