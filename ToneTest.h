@@ -18,7 +18,7 @@ private:
 	int16_t ampDelta=0;
 
 	void log();
-	char music[4]={10,9,8,7};
+	char music[5]={13,PAUSE,13,13,18};
 
 protected:
 	uint8_t icon[20] = { 0,0,0,15,7,1,15,15,15,15,15,15,7,1,15,15,0,0,0,15 };

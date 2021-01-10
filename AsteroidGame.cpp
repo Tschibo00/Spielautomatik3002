@@ -72,6 +72,7 @@ void AsteroidGame::advanceAsteroids() {
 		if (asteroids[i] >= 0)
 			won = false;
 	if (won) {
+		sc->music(victoryMusic, 5,130,600,-4);
 		showScreen(victoryScreen);
 		asteroidRowSpeed -= 200;
 		initLevel();

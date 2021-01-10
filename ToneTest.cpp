@@ -21,7 +21,7 @@ void ToneTest::play() {
 
 
 
-		sc->music(music, 4,500,500,-2);
+		sc->music(music, 5,130,600,-4);
 
 
 

@@ -9,8 +9,8 @@
 SoundController::SoundController() {
 	pinMode(SOUNDPLUSPIN, OUTPUT);
 	pinMode(SOUNDMINUSPIN, OUTPUT);
-	TCCR2A=_BV(WGM21)|_BV(COM2A0);
-	TCCR2B=_BV(CS20);
+	TCCR2A = _BV(WGM21) | _BV(COM2A0);
+	TCCR2B = _BV(CS20);
 }
 
 void SoundController::tone(int16_t freq, int16_t amp, int16_t freqDelta, int16_t ampDelta) {
@@ -94,7 +94,10 @@ void SoundController::play() {
 
 		if ((melody != NULL) && (currentNote >= 0)) {
 			if (notePointer == 0) {
-				tone(notes[melody[currentNote]], melodyAmp, 0, melodyAmpDelta);
+				if (melody[currentNote] == MUTE)
+					tone(0, 0, 0, 0);
+				else if (melody[currentNote] != PAUSE)
+					tone(notes[melody[currentNote]], melodyAmp, 0, melodyAmpDelta);
 			}
 			notePointer++;
 			if (notePointer >= noteLength) {
