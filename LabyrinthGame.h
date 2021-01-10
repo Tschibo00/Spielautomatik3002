@@ -12,7 +12,7 @@
 
 class LabyrinthGame: public Game {
 private:
-	char *labyrinth = NULL;
+	char *labyrinth = NULL;					// 0=unvisited,empty space,  1=wall, 2=visited,empty space
 	int sizeX = 5;
 	int sizeY = 5;
 	void set(int x, int y) {
