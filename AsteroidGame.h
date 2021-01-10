@@ -23,6 +23,9 @@ private:
 	unsigned long asteroidRowSpeed = ASTEROIDSTARTSPEED;
 	char victoryScreen[20] = { 0, 0, 15, 15, 0, 0, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15 };
 	char gameOverScreen[20] = { 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 0, 0, 15, 15, 0, 0, 15, 15 };
+	char gameOverMusic[4]={10,9,8,7};
+	char victoryMusic[4]={2,2,2,2};
+
 
 protected:
 	uint8_t icon[20] = { 7, 15, 3, 7, 0, 0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 15, 0 };

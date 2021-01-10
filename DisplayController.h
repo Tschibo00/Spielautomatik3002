@@ -6,7 +6,7 @@
 class DisplayController {
 private:
 	int ledLatchPin[4] = { A0, A1, A2, A3 };
-	int ledMatrixPin[5] = { 2, 13, 4, 5, 6 };
+	int ledMatrixPin[5] = { 2, 13, 4, 3, 6 };
 	char _displayInternal[20];
 	uint8_t displayWait = 1;
 	uint8_t currentRow = 0;

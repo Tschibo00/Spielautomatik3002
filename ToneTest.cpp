@@ -16,7 +16,21 @@ ToneTest::ToneTest(DisplayController *dc, KeyboardController *kc, SoundControlle
 void ToneTest::play() {
 	dc->clear(0);
 
-	if (kc->getKeyClick(0))freq-=250;
+
+	if (kc->getKeyClick(0)){
+
+
+
+		sc->music(music, 4,500,500,-2);
+
+
+
+
+	}
+
+
+
+//	if (kc->getKeyClick(0))freq-=250;
 	if (kc->getKeyClick(1))freq=3000;
 	if (kc->getKeyClick(2))freq+=250;
 
