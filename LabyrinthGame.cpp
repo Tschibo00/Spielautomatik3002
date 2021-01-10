@@ -57,22 +57,11 @@ void LabyrinthGame::generate(int sizeX, int sizeY) {
 		set(x, 0);
 		set(x, sizeY - 1);
 	}
-	clear(1, 0);
+	clear(1, 0);								// create entry+exit
 	clear(sizeX - 2, sizeY - 1);
 
 	posX = sizeX - 2;
 	posY = sizeY - 1;
-
-	Serial.println();
-	for (y = 0; y < sizeY; y++) {
-		for (x = 0; x < sizeX; x++) {
-			if (get(x, y) == 1)
-				Serial.print("X");
-			else
-				Serial.print(" ");
-		}
-		Serial.println();
-	}
 }
 
 void LabyrinthGame::play() {

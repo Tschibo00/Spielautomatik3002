@@ -29,7 +29,8 @@ private:
 	}
 
 	//player
-	int posX, posY;
+	int posX = 0;
+	int posY = 0;
 	bool showHints = false;
 
 	char victoryScreen[20] = { 0, 0, 15, 15, 0, 0, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15 };
