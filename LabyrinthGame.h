@@ -12,20 +12,24 @@
 
 class LabyrinthGame: public Game {
 private:
-	char *labyrinth = NULL;					// 0=unvisited,empty space,  1=wall, 2=visited,empty space
+	uint8_t *labyrinth = NULL;					// 0=unvisited,empty space,  1=wall, 2=visited,empty space
 	int sizeX = 5;
 	int sizeY = 5;
 	void set(int x, int y) {
 		set(x, y, 1);
 	}
-	void set(int x, int y, char color) {
-		labyrinth[y * sizeX + x] = color;
+	void set(int x, int y, uint8_t color) {
+		uint16_t p = y * sizeX + x;
+		uint8_t mask = 3;
+		labyrinth[p / 4] = labyrinth[p / 4] & (255-(mask << ((p % 4) * 2))) | (color << ((p % 4) * 2));
 	}
 	void clear(int x, int y) {
 		set(x, y, 0);
 	}
-	char get(int x, int y) {
-		return labyrinth[y * sizeX + x];
+	uint8_t get(int x, int y) {
+		uint16_t p = y * sizeX + x;
+		uint8_t mask = 3;
+		return (labyrinth[p / 4] & (mask << ((p % 4) * 2))) >> ((p % 4) * 2);
 	}
 
 	//player

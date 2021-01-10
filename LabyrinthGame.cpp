@@ -26,7 +26,7 @@ void LabyrinthGame::generate(int sizeX, int sizeY) {
 
 	if (labyrinth != NULL)
 		free(labyrinth);
-	labyrinth = (char*) malloc(sizeX * sizeY);
+	labyrinth = (uint8_t*) malloc(sizeX * sizeY/4);
 
 	for (y = 0; y < sizeY; y++)			// clear all
 		for (x = 0; x < sizeX; x++)
