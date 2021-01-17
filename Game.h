@@ -13,6 +13,11 @@
 #include "KeyboardController.h"
 #include "SoundController.h"
 
+static const char victoryScreen[20] = { 0, 0, 15, 15, 0, 0, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15 };
+static const char gameOverScreen[20] = { 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 0, 0, 15, 15, 0, 0, 15, 15 };
+static const char gameOverMusic[4] = { 10, 9, 8, 7 };
+static const char victoryMusic[5] = { 13, PAUSE, 13, 13, 18 };
+
 class Game {
 protected:
 	DisplayController *dc;
@@ -20,7 +25,9 @@ protected:
 	SoundController *sc;
 
 public:
-	virtual ~Game(){};
+	virtual ~Game() {
+	}
+	;
 	virtual uint8_t* getIcon();
 	virtual void play();
 };

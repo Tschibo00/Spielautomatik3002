@@ -1,4 +1,6 @@
 #include "DisplayController.h"
+#include "avr/pgmspace.h"
+#include "font.h"
 
 DisplayController::DisplayController() {
 	uint8_t i;
@@ -71,4 +73,35 @@ void DisplayController::showNumber(int number) {
 		showDigit(4 - i, number % 10);
 		number /= 10;
 	}
+}
+
+void DisplayController::showScroller(char *text, int scrollPos, bool smooth) {
+	int textOffset = scrollPos / 4;
+	int charOffset = smooth?3 - (scrollPos % 4):(scrollPos%4==3?-10:3);
+	clear(0);
+	showCharacter(text[textOffset], charOffset - 3);
+	showCharacter(text[textOffset + 1], charOffset + 1);
+}
+
+void DisplayController::showCharacter(unsigned char c, int xOffset) {
+	uint8_t b;
+	char x, y;
+	unsigned char cc = 0;
+	if ((c >= 97) && (c <= 122))
+		cc = c - 86;
+	if ((c >= 65) && (c <= 90))
+		cc = c - 54;
+	if ((c >= 48) && (c <= 57))
+		cc = c - 47;
+	for (y = 0; y < 5; y++) {
+		b = pgm_read_byte(font + cc * 5 + y);
+		for (x = 3; x >= 0; x--) {
+			set(x + xOffset, y, (b & 1) * 15);
+			b = b >> 1;
+		}
+	}
+}
+
+void DisplayController::showCharacter(unsigned char c) {
+	showCharacter(c, 0);
 }

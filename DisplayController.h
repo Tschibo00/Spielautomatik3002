@@ -23,5 +23,9 @@ public:
 	void copy(const char *source);
 	void showDigit(char row,char number);
 	void showNumber(int number);
+	void showCharacter(unsigned char c);
+	void showCharacter(unsigned char c,int xOffset);
+	void showScroller(char *text,int scrollPos, bool smooth);
+	void set(int x,int y,char color){if ((x>=0)&&(x<4)&&(y>=0)&&(y<5))screen[y*4+x]=color;}
 };
 #endif

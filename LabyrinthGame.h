@@ -37,9 +37,6 @@ private:
 	int posY = 0;
 	bool showHints = false;
 
-	char victoryScreen[20] = { 0, 0, 15, 15, 0, 0, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15 };
-	char victoryMusic[5] = { 13, PAUSE, 13, 13, 18 };
-
 	void showScreen(char *screen);
 
 protected:

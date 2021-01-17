@@ -27,6 +27,7 @@ void LabyrinthGame::generate(int sizeX, int sizeY) {
 	if (labyrinth != NULL)
 		free(labyrinth);
 	labyrinth = (uint8_t*) malloc(sizeX * sizeY/4);
+	if (labyrinth==NULL)Serial.println("malloc problem");
 
 	for (y = 0; y < sizeY; y++)			// clear all
 		for (x = 0; x < sizeX; x++)
