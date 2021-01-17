@@ -32,10 +32,8 @@ void GameController::play() {
 
 		if (currentGame >= 0)
 			dc->copy(gameList[currentGame]->getIcon());
-		else {
-/*			dc->copy(icon + 16 + ((int) (sin(((float) millis()) / 400.) * 4.3)) * 4);*/
-			dc->showScroller("spielautomatik 3001", (millis()/200)%80-4,false);
-		}
+		else
+			dc->showScroller("spielautomatik 3001", (millis() / 200) % 80 - 4, false);
 		dc->flipBuffer();
 	} else
 		gameList[currentGame]->play();

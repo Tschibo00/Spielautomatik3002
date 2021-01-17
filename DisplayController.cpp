@@ -75,7 +75,7 @@ void DisplayController::showNumber(int number) {
 	}
 }
 
-void DisplayController::showScroller(char *text, int scrollPos, bool smooth) {
+void DisplayController::showScroller(const char *text, int scrollPos, bool smooth) {
 	int textOffset = scrollPos / 4;
 	int charOffset = smooth?3 - (scrollPos % 4):(scrollPos%4==3?-10:3);
 	clear(0);

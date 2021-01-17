@@ -29,7 +29,7 @@ void SoundController::noise(int16_t freq, int16_t amp, int16_t freqDelta, int16_
 	playNoise = true;
 }
 
-void SoundController::music(char *melody, uint8_t melodyLength, uint16_t noteLength, int16_t amp, int16_t ampDelta) {
+void SoundController::music(const char *melody, uint8_t melodyLength, uint16_t noteLength, int16_t amp, int16_t ampDelta) {
 	this->melody = melody;
 	this->noteLength = noteLength;
 	this->notePointer = 0;

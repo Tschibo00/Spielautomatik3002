@@ -26,8 +26,9 @@ void LabyrinthGame::generate(int sizeX, int sizeY) {
 
 	if (labyrinth != NULL)
 		free(labyrinth);
-	labyrinth = (uint8_t*) malloc(sizeX * sizeY/4);
-	if (labyrinth==NULL)Serial.println("malloc problem");
+	labyrinth = (uint8_t*) malloc(sizeX * sizeY / 4 + 1);
+	if (labyrinth == NULL)
+		Serial.println("malloc problem");
 
 	for (y = 0; y < sizeY; y++)			// clear all
 		for (x = 0; x < sizeX; x++)
@@ -72,27 +73,27 @@ void LabyrinthGame::play() {
 		generate(sizeX, sizeY);
 
 	if (kc->getKeyClick(4))
-		showHints=!showHints;
+		showHints = !showHints;
 
-	if (kc->getKeyClick(1) && (get(posX, posY - 1) !=1)) {
+	if (kc->getKeyClick(1) && (get(posX, posY - 1) != 1)) {
 		if (posY > 0) {
 			posY--;
 			sc->noise(rand() % 1700 + 200, 170, 0, -4);
 		}
 	}
-	if (kc->getKeyClick(3) && (get(posX - 1, posY) !=1)) {
+	if (kc->getKeyClick(3) && (get(posX - 1, posY) != 1)) {
 		if (posX > 0) {
 			posX--;
 			sc->noise(rand() % 1700 + 200, 170, 0, -4);
 		}
 	}
-	if (kc->getKeyClick(5) && (get(posX + 1, posY) !=1)) {
+	if (kc->getKeyClick(5) && (get(posX + 1, posY) != 1)) {
 		if (posX < sizeX - 1) {
 			posX++;
 			sc->noise(rand() % 1700 + 200, 170, 0, -4);
 		}
 	}
-	if (kc->getKeyClick(7) && (get(posX, posY + 1) !=1)) {
+	if (kc->getKeyClick(7) && (get(posX, posY + 1) != 1)) {
 		if (posY < sizeY - 1) {
 			posY++;
 			sc->noise(rand() % 1700 + 200, 170, 0, -4);
@@ -104,38 +105,28 @@ void LabyrinthGame::play() {
 			if ((y + posY >= 0) && (y + posY < sizeY) && (x + posX >= 0) && (x + posX < sizeX)) {
 				switch (get(x + posX, y + posY)) {
 				case 0:
-					dc->screen[x + 2 + (y + 2) * 4] = 0;
+					dc->set(x + 2, y + 2, 0);
 					break;
 				case 1:
-					dc->screen[x + 2 + (y + 2) * 4] = 15;
+					dc->set(x + 2, y + 2, 15);
 					break;
 				case 2:
 					if (showHints)
-						dc->screen[x + 2 + (y + 2) * 4] = 1;
+						dc->set(x + 2, y + 2, 1);
 					else
-						dc->screen[x + 2 + (y + 2) * 4] = 0;
+						dc->set(x + 2, y + 2, 0);
 					break;
 				}
 			} else
-				dc->screen[x + 2 + (y + 2) * 4] = 0;			//outside of labyrinth
-	dc->screen[10] = (millis() / 100) % 3 + 1;				//player
-	set(posX,posY,2);
+				dc->set(x + 2, y + 2, 0);				//outside of labyrinth
+	dc->set(2, 2, (millis() / 100) % 3 + 1);		//player
+	set(posX, posY, 2);
 
 	if (posY == 0) {
-		sc->music(victoryMusic, 5, 130, 600, -4);
-		showScreen(victoryScreen);
+		victory((sizeX - 3) / 2, 9, 11);
 		sizeX += 2;
 		sizeY += 2;
 		generate(sizeX, sizeY);
-	}
-
-	dc->flipBuffer();
-}
-
-void LabyrinthGame::showScreen(char *screen) {
-	dc->copy(screen);
-	dc->flipBuffer();
-	while (!kc->anyKeyClick(9, 11)) {
-		kc->scanKeyboard();
-	}
+	} else
+		dc->flipBuffer();
 }

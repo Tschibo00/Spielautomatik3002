@@ -21,6 +21,7 @@ private:
 	char asteroids[20];
 	unsigned long asteroidRowWait;
 	unsigned long asteroidRowSpeed = ASTEROIDSTARTSPEED;
+	int level = 1;
 
 protected:
 	uint8_t icon[20] = { 7, 15, 3, 7, 0, 0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 15, 0 };
@@ -33,7 +34,6 @@ public:
 	void play() override;
 	void advanceAsteroids();
 	void initLevel();
-	void showScreen(char *screen);
 	void setFirstRow();
 };
 #endif /* ASTEROIDGAME_H_ */

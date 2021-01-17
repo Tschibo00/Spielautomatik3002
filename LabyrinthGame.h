@@ -21,7 +21,7 @@ private:
 	void set(int x, int y, uint8_t color) {
 		uint16_t p = y * sizeX + x;
 		uint8_t mask = 3;
-		labyrinth[p / 4] = labyrinth[p / 4] & (255-(mask << ((p % 4) * 2))) | (color << ((p % 4) * 2));
+		labyrinth[p / 4] = labyrinth[p / 4] & (255 - (mask << ((p % 4) * 2))) | (color << ((p % 4) * 2));
 	}
 	void clear(int x, int y) {
 		set(x, y, 0);
@@ -37,10 +37,9 @@ private:
 	int posY = 0;
 	bool showHints = false;
 
-	void showScreen(char *screen);
-
 protected:
 	uint8_t icon[20] = { 15, 15, 15, 15, 0, 0, 0, 15, 15, 15, 3, 15, 15, 0, 0, 15, 15, 0, 15, 15 };
+
 public:
 	LabyrinthGame(DisplayController *dc, KeyboardController *kc, SoundController *sc);
 	uint8_t* getIcon() override {

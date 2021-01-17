@@ -23,13 +23,6 @@ private:
 	DisplayController *dc;
 	KeyboardController *kc;
 	SoundController *sc;
-	uint8_t icon[52] = { 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 3, 15, 15, 15, 3, 3, 15, 15, 3, 3,
-			3, 15, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 };
-
-
-
-	unsigned char curchar=0;
-
 
 public:
 	GameController(DisplayController *dc, KeyboardController *kc, SoundController *sc);

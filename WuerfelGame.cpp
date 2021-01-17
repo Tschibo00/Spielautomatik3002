@@ -19,9 +19,9 @@ void WuerfelGame::play() {
 		if (select >= 0) {
 			for (char i = 0; i < numbers[select]; i++)
 				setRandomLed();
-			sc->tone(500,255,10,-2);
+			sc->tone(500, 255, 10, -2);
 		} else {
-			sc->tone(500,255,30,-10);
+			sc->tone(500, 255, 30, -10);
 		}
 		lastNumber = select;
 		dc->flipBuffer();
