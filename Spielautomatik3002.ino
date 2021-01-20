@@ -9,6 +9,7 @@
 #include "WuerfelGame.h"
 #include "AsteroidGame.h"
 #include "LabyrinthGame.h"
+#include "FarmGame.h"
 #include "ToneTest.h"
 
 #if defined(__AVR_ATmega328P__)
@@ -31,6 +32,7 @@ void setup() {
 	gc->registerGame(new WuerfelGame(dc, kc, sc));
 	gc->registerGame(new AsteroidGame(dc, kc, sc));
 	gc->registerGame(new LabyrinthGame(dc, kc, sc));
+	gc->registerGame(new FarmGame(dc, kc, sc));
 	gc->registerGame(new ToneTest(dc, kc, sc));
 
 	cli(); //disable interrupts

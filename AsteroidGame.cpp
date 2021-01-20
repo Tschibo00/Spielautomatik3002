@@ -29,7 +29,6 @@ void AsteroidGame::play(){
 		bulletY = 3;
 		bulletWait = millis() + BULLETSPEED
 		;
-//		sc->tone(10250, 32000, -3, -15);
 		sc->tone(2500, 255, -8, -1);
 	}
 	dc->screen[16 + playerPos] = 15;
