@@ -53,5 +53,14 @@ class DisplayController {
 				for (int xx = x; xx < x + width; xx++)
 					set(xx, yy, color);
 		}
+		void drawFade(char c0, char c1, char c2, char c3, char c4){
+			for (char i = 0; i < 4; i++) {
+				screen[i] = c0;
+				screen[i + 4] = c1;
+				screen[i + 8] = c2;
+				screen[i + 12] = c3;
+				screen[i + 16] = c4;
+			}
+		}
 };
 #endif
