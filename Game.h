@@ -18,6 +18,8 @@ static const char gameOverScreen[20] = { 15, 15, 15, 15, 15, 15, 15, 15, 15, 15,
 static const char gameOverMusic[4] = { 10, 9, 8, 7 };
 static const char victoryMusic[5] = { 13, PAUSE, 13, 13, 18 };
 
+extern char *__brkval;
+
 class Game {
 	private:
 		char scroller[9];
@@ -47,6 +49,11 @@ class Game {
 		void gameover(int level){
 			sc->music(gameOverMusic, 4, 500, 500, -2);
 			levelEnd(gameOverScreen, level, 0, 11);
+		}
+
+		int freeMemory(){
+			char top;
+			return &top - __brkval;
 		}
 
 	public:
