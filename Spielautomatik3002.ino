@@ -17,23 +17,30 @@
 #define __AVR_ATmega168__
 #endif
 
-KeyboardController *kc;
-DisplayController *dc;
 GameController *gc;
-SoundController *sc;
+
+extern char *__brkval;
+
 
 void setup() {
 	pinMode(11, OUTPUT);
 
-	kc = new KeyboardController();
-	dc = new DisplayController();
-	sc = new SoundController();
-	gc = new GameController(dc, kc, sc);
-	gc->registerGame(new WuerfelGame(dc, kc, sc));
-	gc->registerGame(new AsteroidGame(dc, kc, sc));
-	gc->registerGame(new LabyrinthGame(dc, kc, sc));
-	gc->registerGame(new FarmGame(dc, kc, sc));
-	gc->registerGame(new ToneTest(dc, kc, sc));
+	Serial.begin(115200);
+	Serial.println(freeMemory());
+	initKeyboardController();
+	Serial.println(freeMemory());
+	initDisplayController();
+	Serial.println(freeMemory());
+	initSoundController();
+	Serial.println(freeMemory());
+	gc = new GameController();
+	Serial.println(freeMemory());
+	gc->registerGame(new WuerfelGame());
+	gc->registerGame(new AsteroidGame());
+	gc->registerGame(new LabyrinthGame());
+	gc->registerGame(new FarmGame());
+	gc->registerGame(new ToneTest());
+	Serial.println(freeMemory());
 
 	cli(); //disable interrupts
 	//set timer1 interrupt at 7,8khz
@@ -51,17 +58,21 @@ void setup() {
 
 	sei();  //enable interrupts
 
-	BatteryMonitor::checkAndShow(dc);
+		BatteryMonitor::checkAndShow();
 
-	Serial.begin(115200);
+}
+
+int freeMemory(){
+	char top;
+	return &top - __brkval;
 }
 
 ISR(TIMER1_COMPA_vect) {
-	sc->play();
-	dc->show();
+	soundPlay();
+	displayShow();
 }
 
 void loop() {
-	kc->scanKeyboard();
+	scanKeyboard();
 	gc->play();
 }

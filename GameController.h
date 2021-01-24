@@ -10,7 +10,6 @@
 
 #include "Game.h"
 #include "DisplayController.h"
-#include "KeyboardController.h"
 #include "SoundController.h"
 #include "avr/pgmspace.h"
 
@@ -20,12 +19,9 @@ private:
 	int gameCount = 0;
 	bool startup = true;
 	int currentGame = -1;
-	DisplayController *dc;
-	KeyboardController *kc;
-	SoundController *sc;
 
 public:
-	GameController(DisplayController *dc, KeyboardController *kc, SoundController *sc);
+	GameController();
 	void registerGame(Game *game);
 	void selectGame(int game);
 	void play();

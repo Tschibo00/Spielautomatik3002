@@ -20,7 +20,7 @@ protected:
 	uint8_t icon[20] = { 0, 15, 15, 0, 15, 0, 0, 15, 15, 0, 0, 15, 15, 0, 0, 15, 0, 15, 15, 0 };
 
 public:
-	WuerfelGame(DisplayController *dc, KeyboardController *kc, SoundController *sc);
+	WuerfelGame();
 	uint8_t* getIcon() override {
 		return icon;
 	}

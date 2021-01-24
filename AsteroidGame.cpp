@@ -6,10 +6,7 @@
  */
 #include "AsteroidGame.h"
 
-AsteroidGame::AsteroidGame(DisplayController *dc, KeyboardController *kc, SoundController *sc){
-	this->dc = dc;
-	this->kc = kc;
-	this->sc = sc;
+AsteroidGame::AsteroidGame(){
 	initLevel();
 }
 
@@ -17,29 +14,29 @@ void AsteroidGame::play(){
 
 	if (asteroidRowWait == 0) asteroidRowWait = millis() + asteroidRowSpeed;
 
-	dc->clear(0);
+	clear(0);
 
 	advanceAsteroids();
-	dc->copy(asteroids);
+	copy(asteroids);
 
-	if (kc->getKeyClick(9)) if (playerPos > 0) playerPos--;
-	if (kc->getKeyClick(11)) if (playerPos < 3) playerPos++;
-	if ((kc->getKeyClick(10)) && (bulletY < 0)) {
+	if (getKeyClick(9)) if (playerPos > 0) playerPos--;
+	if (getKeyClick(11)) if (playerPos < 3) playerPos++;
+	if ((getKeyClick(10)) && (bulletY < 0)) {
 		bulletX = playerPos;
 		bulletY = 3;
 		bulletWait = millis() + BULLETSPEED
 		;
-		sc->tone(2500, 255, -8, -1);
+		tone(2500, 255, -8, -1);
 	}
-	dc->screen[16 + playerPos] = 15;
+	getScreen()[16 + playerPos] = 15;
 	if ((bulletY >= 0) && (bulletX >= 0)) {
-		dc->screen[bulletY * 4 + bulletX] = 15;
+		getScreen()[bulletY * 4 + bulletX] = 15;
 	}
 
 	if ((bulletY >= 0) && (asteroids[bulletY * 4 + bulletX] > 0)) {
 		asteroids[bulletY * 4 + bulletX] -= 127;
 		bulletY = -1;
-		sc->noise(5000, 255, -20, -2);
+		noise(5000, 255, -20, -2);
 	}
 
 	if ((bulletY >= 0) && (millis() >= bulletWait)) {
@@ -48,7 +45,7 @@ void AsteroidGame::play(){
 		bulletY--;
 	}
 
-	dc->flipBuffer();
+	flipBuffer();
 }
 
 void AsteroidGame::advanceAsteroids(){
@@ -83,7 +80,7 @@ void AsteroidGame::advanceAsteroids(){
 
 void AsteroidGame::setFirstRow(){
 	for (uint8_t i = 0; i < 4; i++)
-		asteroids[i] = dc->palette[(rand() % 4) + 1];
+		asteroids[i] = getPalette()[(rand() % 4) + 1];
 }
 
 void AsteroidGame::initLevel(){

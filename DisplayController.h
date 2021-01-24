@@ -3,20 +3,9 @@
 
 #include <Arduino.h>
 
-class DisplayController {
-	private:
-		int ledLatchPin[4] = { A0, A1, A2, A3 };
-		int ledMatrixPin[5] = { 2, 13, 4, 3, 6 };
-		char _displayInternal[20];
-		uint8_t displayWait = 1;
-		uint8_t currentRow = 0;
-
-	public:
 		// 15, 7, 3, 1 as available brightness, row-wise
-		char palette[5] = { 0, 1, 3, 7, 15 };
-		uint8_t screen[20];
-		DisplayController();
-		void show();
+		void initDisplayController();
+		void displayShow();
 		void flipBuffer();
 		void clear(uint8_t color);
 		void copy(const uint8_t *source);
@@ -31,12 +20,9 @@ class DisplayController {
 		void drawRectangle(int x, int y, int width, int height, char color);
 		void drawBox(int x, int y, int width, int height, char color);
 		void drawFade(char c0, char c1, char c2, char c3, char c4);
+		void set(int x, int y, char color);
+			char get(int x, int y);
+			char *getPalette();
+			uint8_t *getScreen();
 
-		void set(int x, int y, char color){
-			if ((x >= 0) && (x < 4) && (y >= 0) && (y < 5)) screen[y * 4 + x] = color;
-		}
-		char get(int x, int y){
-			return screen[y * 4 + x];
-		}
-};
 #endif

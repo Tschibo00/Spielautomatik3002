@@ -2,7 +2,15 @@
 #include "avr/pgmspace.h"
 #include "font.h"
 
-DisplayController::DisplayController(){
+int ledLatchPin[4] = { A0, A1, A2, A3 };
+int ledMatrixPin[5] = { 2, 13, 4, 3, 6 };
+char _displayInternal[20];
+uint8_t displayWait = 1;
+uint8_t currentRow = 0;
+char palette[5] = { 0, 1, 3, 7, 15 };
+uint8_t screen[20];
+
+void initDisplayController(){
 	uint8_t i;
 	for (i = 0; i < 4; i++) {
 		pinMode(ledLatchPin[i], OUTPUT);
@@ -16,7 +24,7 @@ DisplayController::DisplayController(){
 	}
 }
 
-void DisplayController::show(){
+void displayShow(){
 	uint8_t i;
 
 	if (displayWait == 0) for (i = 0; i < 4; i++)
@@ -35,26 +43,26 @@ void DisplayController::show(){
 	}
 }
 
-void DisplayController::flipBuffer(){
+void flipBuffer(){
 	for (uint8_t i = 0; i < 20; i++)
 		_displayInternal[i] = screen[i];
 }
 
-void DisplayController::clear(uint8_t color){
+void clear(uint8_t color){
 	for (uint8_t i = 0; i < 20; i++)
 		screen[i] = color;
 }
 
-void DisplayController::copy(const uint8_t *source){
+void copy(const uint8_t *source){
 	copy((const char*) source);
 }
 
-void DisplayController::copy(const char *source){
+void copy(const char *source){
 	for (uint8_t i = 0; i < 20; i++)
 		if ((source[i] >= 0) && (source[i] < 16)) screen[i] = source[i];
 }
 
-void DisplayController::showDigit(char row, char number){
+void showDigit(char row, char number){
 	bool negative = (number < 0);
 	if (number < 0) number = -number;
 	for (char i = 0; i < 4; i++) {
@@ -63,14 +71,14 @@ void DisplayController::showDigit(char row, char number){
 	}
 }
 
-void DisplayController::showNumber(int number){
+void showNumber(int number){
 	for (char i = 0; i < 5; i++) {
 		showDigit(4 - i, number % 10);
 		number /= 10;
 	}
 }
 
-void DisplayController::showScroller(const char *text, int scrollPos, bool smooth){
+void showScroller(const char *text, int scrollPos, bool smooth){
 	int textOffset = scrollPos / 4;
 	int charOffset = smooth ? 3 - (scrollPos % 4) : (scrollPos % 4 == 3 ? -10 : 3);
 	clear(0);
@@ -78,7 +86,7 @@ void DisplayController::showScroller(const char *text, int scrollPos, bool smoot
 	showCharacter(text[textOffset + 1], charOffset + 1);
 }
 
-void DisplayController::showCharacter(unsigned char c, int xOffset){
+void showCharacter(unsigned char c, int xOffset){
 	uint8_t b;
 	char x, y;
 	unsigned char cc = 0;
@@ -94,32 +102,32 @@ void DisplayController::showCharacter(unsigned char c, int xOffset){
 	}
 }
 
-void DisplayController::showCharacter(unsigned char c){
+void showCharacter(unsigned char c){
 	showCharacter(c, 0);
 }
 
-void DisplayController::drawLine(int x, int y, int dx, int dy, int steps, char color){
+void drawLine(int x, int y, int dx, int dy, int steps, char color){
 	drawDottedLine(x, y, dx, dy, steps, color, color);
 }
-void DisplayController::drawDottedLine(int x, int y, int dx, int dy, int steps, char color1, char color2){
+void drawDottedLine(int x, int y, int dx, int dy, int steps, char color1, char color2){
 	for (int i = 0; i < steps; i++) {
 		set(x, y, i % 2 ? color1 : color2);
 		x += dx;
 		y += dy;
 	}
 }
-void DisplayController::drawRectangle(int x, int y, int width, int height, char color){
+void drawRectangle(int x, int y, int width, int height, char color){
 	drawLine(x, y, 1, 0, width, color);
 	drawLine(x, y + height - 1, 1, 0, width, color);
 	drawLine(x, y + 1, 0, 1, height - 2, color);
 	drawLine(x + width - 1, y + 1, 0, 1, height - 2, color);
 }
-void DisplayController::drawBox(int x, int y, int width, int height, char color){
+void drawBox(int x, int y, int width, int height, char color){
 	for (int yy = y; yy < y + height; yy++)
 		for (int xx = x; xx < x + width; xx++)
 			set(xx, yy, color);
 }
-void DisplayController::drawFade(char c0, char c1, char c2, char c3, char c4){
+void drawFade(char c0, char c1, char c2, char c3, char c4){
 	for (char i = 0; i < 4; i++) {
 		screen[i] = c0;
 		screen[i + 4] = c1;
@@ -128,3 +136,11 @@ void DisplayController::drawFade(char c0, char c1, char c2, char c3, char c4){
 		screen[i + 16] = c4;
 	}
 }
+void set(int x, int y, char color){
+	if ((x >= 0) && (x < 4) && (y >= 0) && (y < 5)) screen[y * 4 + x] = color;
+}
+char get(int x, int y){
+	return screen[y * 4 + x];
+}
+char*getPalette(){return palette;}
+uint8_t*getScreen(){return screen;}

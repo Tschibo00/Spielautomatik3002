@@ -32,7 +32,7 @@ class AsteroidGame: public Game {
 		uint8_t icon[20] = { 7, 15, 3, 7, 0, 0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 15, 0 };
 
 	public:
-		AsteroidGame(DisplayController *dc, KeyboardController *kc, SoundController *sc);
+		AsteroidGame();
 		uint8_t* getIcon() override{
 			return icon;
 		}

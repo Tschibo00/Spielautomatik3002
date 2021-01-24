@@ -15,16 +15,16 @@ private:
 	uint8_t *labyrinth = NULL;					// 0=unvisited,empty space,  1=wall, 2=visited,empty space
 	int sizeX = 5;
 	int sizeY = 5;
-	void set(int x, int y) {
-		set(x, y, 1);
+	void setPoint(int x, int y) {
+		setPoint(x, y, 1);
 	}
-	void set(int x, int y, uint8_t color) {
+	void setPoint(int x, int y, uint8_t color) {
 		uint16_t p = y * sizeX + x;
 		uint8_t mask = 3;
 		labyrinth[p / 4] = labyrinth[p / 4] & (255 - (mask << ((p % 4) * 2))) | (color << ((p % 4) * 2));
 	}
-	void clear(int x, int y) {
-		set(x, y, 0);
+	void clearPoint(int x, int y) {
+		setPoint(x, y, 0);
 	}
 	uint8_t get(int x, int y) {
 		uint16_t p = y * sizeX + x;
@@ -41,7 +41,7 @@ protected:
 	uint8_t icon[20] = { 15, 15, 15, 15, 0, 0, 0, 15, 15, 15, 3, 15, 15, 0, 0, 15, 15, 0, 15, 15 };
 
 public:
-	LabyrinthGame(DisplayController *dc, KeyboardController *kc, SoundController *sc);
+	LabyrinthGame();
 	uint8_t* getIcon() override {
 		return icon;
 	}

@@ -38,14 +38,16 @@ class FarmGame: public Game {
 		unsigned long blinkKaufen = 0;
 		unsigned long werbungStart = 0;
 		char werbungPointer = 0;
-/*
+
 		char *tierPosX = NULL;
 		char *tierPosY = NULL;
 		char *tierType = NULL;
-*/
+
+/*
 		char tierPosX [MAX_TIER];
 		char tierPosY [MAX_TIER];
 		char tierType [MAX_TIER];
+*/
 		uint16_t totalTiere = 0;
 
 		// persistent values
@@ -91,7 +93,7 @@ class FarmGame: public Game {
 		uint8_t icon[20] = { 15, 15, 15, 15, 15, 0, 0, 15, 15, 0, 0, 15, 15, 0, 0, 15, 15, 0, 15, 15 };
 
 	public:
-		FarmGame(DisplayController *dc, KeyboardController *kc, SoundController *sc);
+		FarmGame();
 		uint8_t* getIcon() override{
 			return icon;
 		}

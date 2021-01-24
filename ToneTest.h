@@ -15,7 +15,7 @@ class ToneTest: public Game {
 		uint8_t icon[20] = { 0, 0, 0, 15, 7, 1, 15, 15, 15, 15, 15, 15, 7, 1, 15, 15, 0, 0, 0, 15 };
 
 	public:
-		ToneTest(DisplayController *dc, KeyboardController *kc, SoundController *sc);
+		ToneTest();
 		uint8_t* getIcon() override{
 			return icon;
 		}

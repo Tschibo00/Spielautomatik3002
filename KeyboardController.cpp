@@ -1,6 +1,12 @@
 #include "KeyboardController.h"
 
-KeyboardController::KeyboardController() {
+
+	int keyLatchPin[3] = { 9, 8, 7 };
+	int keyMatrixPin[4] = { 10, 12, A4, A5 };
+	bool keyStatus[12];
+	bool keyLocked[12];
+
+void initKeyboardController() {
 	uint8_t i;
 	for (i = 0; i < 3; i++)
 		pinMode(keyLatchPin[i], OUTPUT);
@@ -10,7 +16,7 @@ KeyboardController::KeyboardController() {
 		keyLocked[i] = false;
 }
 
-void KeyboardController::scanKeyboard() {
+void scanKeyboard() {
 	uint8_t i, j;
 
 	for (j = 0; j < 3; j++) {
@@ -21,11 +27,11 @@ void KeyboardController::scanKeyboard() {
 	}
 }
 
-bool KeyboardController::getKeyStatus(uint8_t key) {
+bool getKeyStatus(uint8_t key) {
 	return keyStatus[key];
 }
 
-bool KeyboardController::getKeyClick(uint8_t key) {
+bool getKeyClick(uint8_t key) {
 	if (getKeyStatus(key)) {
 		if (keyLocked[key])
 			return false;
@@ -39,21 +45,21 @@ bool KeyboardController::getKeyClick(uint8_t key) {
 	}
 }
 
-char KeyboardController::getNumberStatus(){
+char getNumberStatus(){
 	for(uint8_t i=0;i<12;i++)
 		if (getKeyStatus(i))
 			return i;
 	return -1;
 }
 
-char KeyboardController::getNumberClick(){
+char getNumberClick(){
 	for(uint8_t i=0;i<12;i++)
 		if (getKeyClick(i))
 			return i;
 	return -1;
 }
 
-bool KeyboardController::anyKeyClick(uint8_t first, uint8_t last){
+bool anyKeyClick(uint8_t first, uint8_t last){
 	for(uint8_t i=first;i<=last;i++)
 		if (getKeyClick(i))
 			return true;

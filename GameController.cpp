@@ -1,10 +1,7 @@
 #include "GameController.h"
 #include <math.h>
 
-GameController::GameController(DisplayController *dc, KeyboardController *kc, SoundController *sc) {
-	this->dc = dc;
-	this->kc = kc;
-	this->sc = sc;
+GameController::GameController() {
 }
 
 void GameController::registerGame(Game *game) {
@@ -22,7 +19,7 @@ void GameController::selectGame(int game) {
 
 void GameController::play() {
 	if (startup) {
-		char select = kc->getNumberClick();
+		char select = getNumberClick();
 		if (select >= 0) {
 			if (select == currentGame)
 				startup = false;
@@ -31,10 +28,10 @@ void GameController::play() {
 		}
 
 		if (currentGame >= 0)
-			dc->copy(gameList[currentGame]->getIcon());
+			copy(gameList[currentGame]->getIcon());
 		else
-			dc->showScroller("spielautomatik 3001", (millis() / 200) % 80 - 4, false);
-		dc->flipBuffer();
+			showScroller("spielautomatik 3001", (millis() / 200) % 80 - 4, false);
+		flipBuffer();
 	} else
 		gameList[currentGame]->play();
 }
