@@ -4,7 +4,7 @@ FarmGame::FarmGame(){
 	tierPosX = (char*) malloc(MAX_TIER);
 	tierPosY = (char*) malloc(MAX_TIER);
 	tierType = (char*) malloc(MAX_TIER);
-	if (tierPosX == NULL) Serial.println("malloc failed");
+	if (tierPosX == NULL || tierPosY == NULL || tierType == NULL) Serial.println("malloc failed");
 	for (int i = 0; i < MAX_TIER; i++)
 		tierType[i] = -1;
 	totalTiere = 0;
@@ -100,8 +100,8 @@ void FarmGame::play(){
 				}
 				if ((state == FARM || state == WEIDE || state == MARKT) && posX == 4 && posY == 7 && hasHaus) enter(HAUS, 5, 8);
 				if ((state == FARM || state == WEIDE || state == MARKT) && posX == 9 && posY == 8) {
-					initTiere(cows, KUH, 1, 1, 8 + hasStall, 8 + hasStall);
-					initTiere(sheep, SCHAF, 1, 1, 8 + hasStall, 8 + hasStall);
+					initTiere(cows, KUH, 1, 1, 7 + hasStall, 7 + hasStall);
+					initTiere(sheep, SCHAF, 1, 1, 7 + hasStall, 7 + hasStall);
 					enter(STALL, 5, 8);
 				}
 				if ((state == FARM || state == WEIDE || state == MARKT) && posX == 4 && posY == 40) {	// easter egg portal
@@ -319,9 +319,12 @@ void FarmGame::showFarm(){
 			break;
 		case STALL:
 			drawRectangle(rx(0), ry(0), 9 + hasStall, 9 + hasStall, 15);
-			drawDottedLine(rx(3), ry(3), 0, 1, 5 + hasStall, 1, 3);
-			drawDottedLine(rx(3), ry(3), 1, 0, 2 + hasStall, 1, 3);
-			drawDottedLine(rx(5 + hasStall), ry(3), 0, 1, 5 + hasStall, 3, 1);
+			/*
+			 drawDottedLine(rx(3), ry(3), 0, 1, 5 + hasStall, 1, 3);
+			 drawDottedLine(rx(3), ry(3), 1, 0, 2 + hasStall, 1, 3);
+			 drawDottedLine(rx(5 + hasStall), ry(3), 0, 1, 5 + hasStall, 3, 1);
+			 */
+			set(2, 2, (millis() / 100) % 3 + 1);		//player
 			drawTiere();
 			set(rx(5), ry(8 + hasStall), 2);
 			break;
@@ -373,12 +376,6 @@ void FarmGame::initTiere(uint16_t count, char type, int x, int y, int dx, int dy
 		tierType[totalTiere + i] = type;
 		tierPosX[totalTiere + i] = rand() % dx + x;
 		tierPosY[totalTiere + i] = rand() % dy + y;
-		Serial.print(tierType[totalTiere + i]);
-		Serial.print(" ");
-		Serial.print(tierPosX[totalTiere + i]);
-		Serial.print(" ");
-		Serial.print(tierPosY[totalTiere + i]);
-		Serial.println();
 	}
 	totalTiere += count;
 }
@@ -386,25 +383,39 @@ void FarmGame::initTiere(uint16_t count, char type, int x, int y, int dx, int dy
 void FarmGame::drawTiere(){
 	if (tierPosX == NULL) return;
 	for (uint16_t i = 0; i < totalTiere; i++) {
+		if (rx(tierPosX[i] >= 0 && rx(tierPosX[i] < 4) && ry(tierPosY[i]) >= 0 && ry(tierPosY[i]) < 5)) switch (rand() % 300) {
+			case 0:
+				if (rx(tierPosX[i]) > 0 && getScreen()[ry(tierPosY[i] * 4 + rx(tierPosX[i]) - 1)] == 0) tierPosX[i]--;
+				break;
+			case 1:
+				if (rx(tierPosX[i]) < 3 && getScreen()[ry(tierPosY[i] * 4 + rx(tierPosX[i]) + 1)] == 0) tierPosX[i]++;
+				break;
+			case 2:
+				if (ry(tierPosY[i]) > 0 && getScreen()[ry(tierPosY[i] * 4 + rx(tierPosX[i]) - 4)] == 0) tierPosY[i]--;
+				break;
+			case 3:
+				if (ry(tierPosY[i]) < 4 && getScreen()[ry(tierPosY[i] * 4 + rx(tierPosX[i]) + 4)] == 0) tierPosY[i]++;
+				break;
+		}
 		switch (tierType[i]) {
 			case KUH:
-				set(rx(tierPosX[i]), ry(tierPosY[i]), 1);
-				set(rx(tierPosX[i]), ry(tierPosY[i] + 1), 1);
+				set(rx(tierPosX[i]), ry(tierPosY[i]), 12);
+//				set(rx(tierPosX[i]), ry(tierPosY[i] + 1), 1);
 				break;
 			case SCHAF:
-				set(rx(tierPosX[i]), ry(tierPosY[i]), 12);
-				set(rx(tierPosX[i]), ry(tierPosY[i] + 1), 12);
+				set(rx(tierPosX[i]), ry(tierPosY[i]), 2);
+//				set(rx(tierPosX[i]), ry(tierPosY[i] + 1), 12);
 				break;
 			case SCHWEIN:
-				set(rx(tierPosX[i]), ry(tierPosY[i]), 1);
-				set(rx(tierPosX[i]), ry(tierPosY[i] + 1), 1);
-				set(rx(tierPosX[i] + 1), ry(tierPosY[i]), 1);
+				set(rx(tierPosX[i]), ry(tierPosY[i]), 12);
+//				set(rx(tierPosX[i]), ry(tierPosY[i] + 1), 1);
+//				set(rx(tierPosX[i] + 1), ry(tierPosY[i]), 1);
 				break;
 			case HUHN:
-				set(rx(tierPosX[i]), ry(tierPosY[i]), 12);
+				set(rx(tierPosX[i]), ry(tierPosY[i]), 2);
 				break;
 			case VOGEL:
-				set(rx(tierPosX[i]), ry(tierPosY[i]), 1);
+				set(rx(tierPosX[i]), ry(tierPosY[i]), 2);
 				break;
 		}
 	}

@@ -25,7 +25,7 @@
 #define HUHN 3
 #define VOGEL 4
 
-#define MAX_TIER 30
+#define MAX_TIER 100		// shouldn't be more than 100 to avoid memory problems
 
 class FarmGame: public Game {
 	private:
@@ -42,12 +42,6 @@ class FarmGame: public Game {
 		char *tierPosX = NULL;
 		char *tierPosY = NULL;
 		char *tierType = NULL;
-
-		/*
-		 char tierPosX [MAX_TIER];
-		 char tierPosY [MAX_TIER];
-		 char tierType [MAX_TIER];
-		 */
 		uint16_t totalTiere = 0;
 
 		// persistent values
@@ -60,9 +54,9 @@ class FarmGame: public Game {
 		char hasChicken = 0;
 		char hasCage = 0;
 		unsigned char day = 0;
-		uint16_t cows = 4;
+		uint16_t cows = 40;
 		uint16_t pigs = 0;
-		uint16_t sheep = 2;
+		uint16_t sheep = 20;
 		uint16_t chicken = 0;
 		uint16_t birds = 0;
 

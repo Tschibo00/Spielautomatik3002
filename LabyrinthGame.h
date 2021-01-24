@@ -6,7 +6,7 @@
 class LabyrinthGame: public Game {
 	private:
 		uint8_t *labyrinth = NULL;					// 0=unvisited,empty space,  1=wall, 2=visited,empty space
-		int sizeX = 5;
+		int sizeX = 5;									// max 55*55
 		int sizeY = 5;
 		void setPoint(int x, int y){
 			setPoint(x, y, 1);
