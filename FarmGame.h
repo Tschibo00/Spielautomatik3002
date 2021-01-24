@@ -3,14 +3,14 @@
 #include "Game.h"
 
 #define FARM 0
-#define WEIDE 1
+#define HAUS_OG 1
 #define MARKT 2
 #define STALL 3
 #define HAUS 4
 #define CAGE 5
 #define CHICKEN 6
 #define SCHWEINE 7
-#define HAUS_OG 8
+#define WEIDE 8
 
 #define RUNNING 0
 #define GELD 1
@@ -49,22 +49,24 @@ class FarmGame: public Game {
 		char daytime = 0;	// 0=morgen,1=vormittag,2=mittag,3=nachmittag, 4=abend, 5=nacht
 		char happiness = 0;
 		char hasStall = 1;
-		char hasHaus = 0;
-		char hasSchweine = 0;
-		char hasChicken = 0;
-		char hasCage = 0;
+		char hasHaus = 1;
+		char hasSchweine = 1;
+		char hasChicken = 1;
+		char hasCage = 1;
 		unsigned char day = 0;
-		uint16_t cows = 40;
-		uint16_t pigs = 0;
-		uint16_t sheep = 20;
-		uint16_t chicken = 0;
-		uint16_t birds = 0;
+		uint16_t cows = 10;
+		uint16_t pigs = 10;
+		uint16_t sheep = 10;
+		uint16_t chicken = 10;
+		uint16_t birds = 1;
 
 		void showFarm();
 		void enter(char newState, int startPosX, int startPosY);
 		void initTiere(uint16_t count, char type, int x, int y, int dx, int dy);
 		void drawTiere();
 		void deinitTiere();
+		void logPosition();
+		void tierSound(char tierType);
 		inline int rx(int coord){
 			return coord - posX + 2;
 		}

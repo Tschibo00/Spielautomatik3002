@@ -97,20 +97,33 @@ void FarmGame::play(){
 				if (getScreen()[6] < 4) {
 					posY--;
 					noise(rand() % 1700 + 200, 170, 0, -4);
+					logPosition();
 				}
 				if ((state == FARM || state == WEIDE || state == MARKT) && posX == 4 && posY == 7 && hasHaus) enter(HAUS, 5, 8);
 				if ((state == FARM || state == WEIDE || state == MARKT) && posX == 9 && posY == 8) {
-					initTiere(cows, KUH, 1, 1, 7 + hasStall, 7 + hasStall);
-					initTiere(sheep, SCHAF, 1, 1, 7 + hasStall, 7 + hasStall);
-					enter(STALL, 5, 8);
+					totalTiere = 0;
+					initTiere(cows, KUH, 1, 1, 6 + hasStall, 6 + hasStall);
+					initTiere(sheep, SCHAF, 1, 1, 6 + hasStall, 6 + hasStall);
+					enter(STALL, 5, 7 + hasStall);
+				}
+				if ((state == FARM || state == WEIDE || state == MARKT) && posX == -2 && posY == 6) {
+					totalTiere = 0;
+					initTiere(pigs, SCHWEIN, 1, 1, 6 + hasSchweine, 6 + hasSchweine);
+					enter(SCHWEINE, 5, 7 + hasSchweine);
+				}
+				if ((state == FARM || state == WEIDE || state == MARKT) && posX == 9 && posY == 2) {
+					totalTiere = 0;
+					initTiere(chicken, HUHN, 1, 1, 6 + hasChicken, 6 + hasChicken);
+					enter(CHICKEN, 5, 7 + hasChicken);
 				}
 				if ((state == FARM || state == WEIDE || state == MARKT) && posX == 4 && posY == 40) {	// easter egg portal
 					posX = 1;
 					posY = 1;
 				}
 				if (state == HAUS && posX >= 7 && posY == 1) {
+					totalTiere = 0;
+					initTiere(birds, VOGEL, 3 - hasCage, 3, 1 + hasCage, 1 + hasCage);
 					state = HAUS_OG;
-//				tone(300, 350, 3, -1);
 				}
 				if (state == MARKT && posY == 13) enter(FARM, posX, posY);
 			}
@@ -122,6 +135,7 @@ void FarmGame::play(){
 			} else {
 				if (getScreen()[9] < 4) {
 					posX--;
+					logPosition();
 					noise(rand() % 1700 + 200, 170, 0, -4);
 				}
 				if (state == WEIDE && posX == 14) enter(FARM, posX, posY);
@@ -140,6 +154,7 @@ void FarmGame::play(){
 				case RUNNING:
 					if (getScreen()[11] < 4) {
 						posX++;
+						logPosition();
 						noise(rand() % 1700 + 200, 170, 0, -4);
 					}
 					if (state == FARM && posX == 14) enter(WEIDE, posX, posY);
@@ -154,13 +169,15 @@ void FarmGame::play(){
 			} else {
 				if (getScreen()[14] < 4) {
 					posY++;
+					logPosition();
 					noise(rand() % 1700 + 200, 170, 0, -4);
 				}
 				if (state == HAUS && posX == 5 && posY == 9) enter(FARM, 4, 8);
 				if (state == STALL && posX == 5 && posY == 8 + hasStall) enter(FARM, 9, 9);
+				if (state == SCHWEINE && posX == 5 && posY == 8 + hasStall) enter(FARM, -2, 7);
+				if (state == CHICKEN && posX == 5 && posY == 8 + hasChicken) enter(FARM, 9, 3);
 				if (state == HAUS_OG && posX >= 7 && posY == 4) {
 					state = HAUS;
-//				tone(2500, 350, -8, -1);
 				}
 				if (state == FARM && posY == 13) enter(MARKT, posX, posY);
 			}
@@ -316,17 +333,25 @@ void FarmGame::showFarm(){
 				drawLine(0, ry(98), 1, 0, 4, 5);
 				drawLine(0, ry(99), 1, 0, 4, 6);
 			}
+			if (state == WEIDE) tierSound(WEIDE);
 			break;
 		case STALL:
 			drawRectangle(rx(0), ry(0), 9 + hasStall, 9 + hasStall, 15);
-			/*
-			 drawDottedLine(rx(3), ry(3), 0, 1, 5 + hasStall, 1, 3);
-			 drawDottedLine(rx(3), ry(3), 1, 0, 2 + hasStall, 1, 3);
-			 drawDottedLine(rx(5 + hasStall), ry(3), 0, 1, 5 + hasStall, 3, 1);
-			 */
 			set(2, 2, (millis() / 100) % 3 + 1);		//player
 			drawTiere();
 			set(rx(5), ry(8 + hasStall), 2);
+			break;
+		case SCHWEINE:
+			drawRectangle(rx(0), ry(0), 9 + hasSchweine, 9 + hasSchweine, 15);
+			set(2, 2, (millis() / 100) % 3 + 1);		//player
+			drawTiere();
+			set(rx(5), ry(8 + hasSchweine), 2);
+			break;
+		case CHICKEN:
+			drawRectangle(rx(0), ry(0), 9 + hasChicken, 9 + hasChicken, 15);
+			set(2, 2, (millis() / 100) % 3 + 1);		//player
+			drawTiere();
+			set(rx(5), ry(8 + hasChicken), 2);
 			break;
 		case HAUS:
 			drawRectangle(rx(0), ry(0), 10, 10, 15);
@@ -353,11 +378,8 @@ void FarmGame::showFarm(){
 				drawRectangle(rx(2 - hasCage), ry(2), 3 + hasCage, 3 + hasCage, 2);
 				set(rx(2 - hasCage), ry(5 + hasCage), 2);
 				set(rx(4), ry(5 + hasCage), 2);
+				drawTiere();
 			}
-			break;
-		case CAGE:
-			break;
-		case CHICKEN:
 			break;
 	}
 	set(2, 2, (millis() / 100) % 3 + 1);		//player
@@ -367,7 +389,6 @@ void FarmGame::enter(char newState, int startPosX, int startPosY){
 	state = newState;
 	posX = startPosX;
 	posY = startPosY;
-//	noise(10000, 600, 30, -4);
 }
 
 void FarmGame::initTiere(uint16_t count, char type, int x, int y, int dx, int dy){
@@ -400,23 +421,53 @@ void FarmGame::drawTiere(){
 		switch (tierType[i]) {
 			case KUH:
 				set(rx(tierPosX[i]), ry(tierPosY[i]), 12);
-//				set(rx(tierPosX[i]), ry(tierPosY[i] + 1), 1);
+				tierSound(KUH);
 				break;
 			case SCHAF:
 				set(rx(tierPosX[i]), ry(tierPosY[i]), 2);
-//				set(rx(tierPosX[i]), ry(tierPosY[i] + 1), 12);
+				tierSound(SCHAF);
 				break;
 			case SCHWEIN:
 				set(rx(tierPosX[i]), ry(tierPosY[i]), 12);
-//				set(rx(tierPosX[i]), ry(tierPosY[i] + 1), 1);
-//				set(rx(tierPosX[i] + 1), ry(tierPosY[i]), 1);
+				tierSound(SCHWEIN);
 				break;
 			case HUHN:
 				set(rx(tierPosX[i]), ry(tierPosY[i]), 2);
+				tierSound(HUHN);
 				break;
 			case VOGEL:
 				set(rx(tierPosX[i]), ry(tierPosY[i]), 2);
+				tierSound(VOGEL);
 				break;
 		}
+	}
+}
+
+void FarmGame::logPosition(){
+	Serial.print(posX);
+	Serial.print("/");
+	Serial.println(posY);
+}
+
+void FarmGame::tierSound(char tierType){
+	if (rand() % 1400 == 0) switch (tierType) {
+		case KUH:
+			tone(500, 255, 10, -2);
+			break;
+		case SCHAF:
+			noise(5000, 255, -20, -2);
+			break;
+		case SCHWEIN:
+			tone(300, 500, 3, -1);
+			break;
+		case HUHN:
+			tone(500, 255, 30, -10);
+			break;
+		case VOGEL:
+			tone(500, 1000, 300, -2);
+			break;
+		case WEIDE:
+			tone(500, 500, 2000, -1);
+			break;
 	}
 }
