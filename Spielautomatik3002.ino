@@ -17,12 +17,9 @@
 #define __AVR_ATmega168__
 #endif
 
-GameController *gc;
-
 extern char *__brkval;
 
-
-void setup() {
+void setup(){
 	pinMode(11, OUTPUT);
 
 	Serial.begin(115200);
@@ -33,13 +30,11 @@ void setup() {
 	Serial.println(freeMemory());
 	initSoundController();
 	Serial.println(freeMemory());
-	gc = new GameController();
-	Serial.println(freeMemory());
-	gc->registerGame(new WuerfelGame());
-	gc->registerGame(new AsteroidGame());
-	gc->registerGame(new LabyrinthGame());
-	gc->registerGame(new FarmGame());
-	gc->registerGame(new ToneTest());
+	registerGame(new WuerfelGame());
+	registerGame(new AsteroidGame());
+	registerGame(new LabyrinthGame());
+	registerGame(new FarmGame());
+	registerGame(new ToneTest());
 	Serial.println(freeMemory());
 
 	cli(); //disable interrupts
@@ -58,7 +53,7 @@ void setup() {
 
 	sei();  //enable interrupts
 
-		BatteryMonitor::checkAndShow();
+	BatteryMonitor::checkAndShow();
 
 }
 
@@ -67,12 +62,12 @@ int freeMemory(){
 	return &top - __brkval;
 }
 
-ISR(TIMER1_COMPA_vect) {
+ISR(TIMER1_COMPA_vect){
 	soundPlay();
 	displayShow();
 }
 
-void loop() {
+void loop(){
 	scanKeyboard();
-	gc->play();
+	play();
 }

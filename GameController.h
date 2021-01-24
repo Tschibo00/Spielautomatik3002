@@ -13,18 +13,8 @@
 #include "SoundController.h"
 #include "avr/pgmspace.h"
 
-class GameController {
-private:
-	Game *gameList[10];
-	int gameCount = 0;
-	bool startup = true;
-	int currentGame = -1;
-
-public:
-	GameController();
-	void registerGame(Game *game);
-	void selectGame(int game);
-	void play();
-};
+void registerGame(Game *game);
+void selectGame(int game);
+void play();
 
 #endif /* GAMECONTROLLER_H_ */

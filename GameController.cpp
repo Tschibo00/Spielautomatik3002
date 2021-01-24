@@ -1,23 +1,25 @@
 #include "GameController.h"
 #include <math.h>
 
-GameController::GameController() {
-}
+	Game *gameList[10];
+	int gameCount = 0;
+	bool startup = true;
+	int currentGame = -1;
 
-void GameController::registerGame(Game *game) {
+void registerGame(Game *game) {
 	if (gameCount < 10) {
 		gameList[gameCount] = game;
 		gameCount++;
 	}
 }
 
-void GameController::selectGame(int game) {
+void selectGame(int game) {
 	if ((game >= 0) && (game < gameCount)) {
 		currentGame = game;
 	}
 }
 
-void GameController::play() {
+void play() {
 	if (startup) {
 		char select = getNumberClick();
 		if (select >= 0) {
