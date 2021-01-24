@@ -25,7 +25,7 @@
 #define HUHN 3
 #define VOGEL 4
 
-#define MAX_TIER 10
+#define MAX_TIER 30
 
 class FarmGame: public Game {
 	private:
@@ -43,11 +43,11 @@ class FarmGame: public Game {
 		char *tierPosY = NULL;
 		char *tierType = NULL;
 
-/*
-		char tierPosX [MAX_TIER];
-		char tierPosY [MAX_TIER];
-		char tierType [MAX_TIER];
-*/
+		/*
+		 char tierPosX [MAX_TIER];
+		 char tierPosY [MAX_TIER];
+		 char tierType [MAX_TIER];
+		 */
 		uint16_t totalTiere = 0;
 
 		// persistent values
@@ -89,14 +89,8 @@ class FarmGame: public Game {
 				15, 0, 15, 2, 2, 15, 2, 15, 15, 2, 15, 2, 2, 15, 0, 15, 15, 0, 15, 15, 15, 15, 15, 2, 2, 15, 15, 2, 2, 15, 15, 2, 2, 15, 15, 2,
 				15, 15 };
 
-	protected:
-		uint8_t icon[20] = { 15, 15, 15, 15, 15, 0, 0, 15, 15, 0, 0, 15, 15, 0, 0, 15, 15, 0, 15, 15 };
-
 	public:
 		FarmGame();
-		uint8_t* getIcon() override{
-			return icon;
-		}
 		void play() override;
 };
 #endif

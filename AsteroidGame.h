@@ -1,10 +1,3 @@
-/*
- * AsteroidGame.h
- *
- *  Created on: Dec 29, 2020
- *      Author: hopper
- */
-
 #ifndef ASTEROIDGAME_H_
 #define ASTEROIDGAME_H_
 #include "Game.h"
@@ -28,14 +21,8 @@ class AsteroidGame: public Game {
 		void initLevel();
 		void setFirstRow();
 
-	protected:
-		uint8_t icon[20] = { 7, 15, 3, 7, 0, 0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 15, 0 };
-
 	public:
 		AsteroidGame();
-		uint8_t* getIcon() override{
-			return icon;
-		}
 		void play() override;
 };
 #endif /* ASTEROIDGAME_H_ */

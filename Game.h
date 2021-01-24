@@ -1,10 +1,3 @@
-/*
- * Game.h
- *
- *  Created on: Dec 27, 2020
- *      Author: hopper
- */
-
 #ifndef GAME_H_
 #define GAME_H_
 
@@ -49,7 +42,6 @@ class Game {
 		virtual ~Game(){
 		}
 		;
-		virtual uint8_t* getIcon();
 		virtual void play();
 };
 

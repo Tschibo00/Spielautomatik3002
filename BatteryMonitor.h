@@ -1,10 +1,3 @@
-/*
- * BatteryMonitor.h
- *
- *  Created on: Jan 5, 2021
- *      Author: hopper
- */
-
 #ifndef BATTERYMONITOR_H_
 #define BATTERYMONITOR_H_
 

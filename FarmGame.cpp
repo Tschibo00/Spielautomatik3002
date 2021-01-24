@@ -1,22 +1,16 @@
 #include "FarmGame.h"
 
 FarmGame::FarmGame(){
-	deinitTiere();
+	tierPosX = (char*) malloc(MAX_TIER);
+	tierPosY = (char*) malloc(MAX_TIER);
+	tierType = (char*) malloc(MAX_TIER);
+	if (tierPosX == NULL) Serial.println("malloc failed");
+	for (int i = 0; i < MAX_TIER; i++)
+		tierType[i] = -1;
+	totalTiere = 0;
 }
 
 void FarmGame::play(){
-/*
-	if (tierPosX == NULL) {
-		Serial.println(freeMemory());
-		Serial.println(sizeof(int));
-		Serial.println(sizeof(char));
-		tierPosX = (char*) malloc(MAX_TIER);
-		tierPosY = (char*) malloc(MAX_TIER);
-		tierType = (char*) malloc(MAX_TIER);
-		if (tierPosX==NULL)Serial.println("malloc failed");
-	}
-*/
-
 	clear(0);
 
 	switch (globalState) {
@@ -379,11 +373,11 @@ void FarmGame::initTiere(uint16_t count, char type, int x, int y, int dx, int dy
 		tierType[totalTiere + i] = type;
 		tierPosX[totalTiere + i] = rand() % dx + x;
 		tierPosY[totalTiere + i] = rand() % dy + y;
-		Serial.print(tierType[totalTiere+i]);
+		Serial.print(tierType[totalTiere + i]);
 		Serial.print(" ");
-		Serial.print(tierPosX[totalTiere+i]);
+		Serial.print(tierPosX[totalTiere + i]);
 		Serial.print(" ");
-		Serial.print(tierPosY[totalTiere+i]);
+		Serial.print(tierPosY[totalTiere + i]);
 		Serial.println();
 	}
 	totalTiere += count;
@@ -414,11 +408,4 @@ void FarmGame::drawTiere(){
 				break;
 		}
 	}
-}
-
-void FarmGame::deinitTiere(){
-	if (tierPosX == NULL) return;
-	for (int i = 0; i < MAX_TIER; i++)
-		tierType[i] = -1;
-	totalTiere = 0;
 }

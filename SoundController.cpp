@@ -1,34 +1,33 @@
 #include "SoundController.h"
 
-	int8_t _slowdown = 0;
-	int16_t _freq = 0;
-	int16_t _amp = 0;
-	int16_t _freqDelta = 0;
-	int16_t _ampDelta = 0;
-	int16_t _counter = 0;
-	bool _playNoise = false;
-	// music stuff
-	char *_melody = NULL;
-	uint8_t _melodyLength = 0;
-	int16_t _melodyAmp = 0;
-	int16_t _melodyAmpDelta = 0;
-	int8_t _currentNote = -1;
-	int16_t _noteLength = 0;
-	int16_t _notePointer = -1;
+int8_t _slowdown = 0;
+int16_t _freq = 0;
+int16_t _amp = 0;
+int16_t _freqDelta = 0;
+int16_t _ampDelta = 0;
+int16_t _counter = 0;
+bool _playNoise = false;
+// music stuff
+char *_melody = NULL;
+uint8_t _melodyLength = 0;
+int16_t _melodyAmp = 0;
+int16_t _melodyAmpDelta = 0;
+int8_t _currentNote = -1;
+int16_t _noteLength = 0;
+int16_t _notePointer = -1;
 
+int16_t notes[60] = { 262, 277, 294, 311, 330, 349, 370, 392, 415, 440, 466, 494, 523, 554, 587, 622, 659, 698, 740, 784, 831, 880, 932,
+		988, 1047, 1109, 1175, 1245, 1319, 1397, 1480, 1568, 1661, 1760, 1865, 1976, 2093, 2217, 2349, 2489, 2637, 2794, 2960, 3136, 3322,
+		3520, 3729, 3951, 4186, 4435, 4699, 4978, 5274, 5588, 5920, 6272, 6645, 7040, 7459, 7902 };
 
-	int16_t notes[60] = { 262, 277, 294, 311, 330, 349, 370, 392, 415, 440, 466, 494, 523, 554, 587, 622, 659, 698, 740,
-			784, 831, 880, 932, 988, 1047, 1109, 1175, 1245, 1319, 1397, 1480, 1568, 1661, 1760, 1865, 1976, 2093, 2217, 2349, 2489, 2637,
-			2794, 2960, 3136, 3322, 3520, 3729, 3951, 4186, 4435, 4699, 4978, 5274, 5588, 5920, 6272, 6645, 7040, 7459, 7902 };
-
-void initSoundController() {
+void initSoundController(){
 	pinMode(SOUNDPLUSPIN, OUTPUT);
 	pinMode(SOUNDMINUSPIN, OUTPUT);
 	TCCR2A = _BV(WGM21) | _BV(COM2A0);
 	TCCR2B = _BV(CS20);
 }
 
-void tone(int16_t freq, int16_t amp, int16_t freqDelta, int16_t ampDelta) {
+void tone(int16_t freq, int16_t amp, int16_t freqDelta, int16_t ampDelta){
 	_freq = freq;
 	_amp = amp;
 	_freqDelta = freqDelta;
@@ -36,7 +35,7 @@ void tone(int16_t freq, int16_t amp, int16_t freqDelta, int16_t ampDelta) {
 	_playNoise = false;
 }
 
-void noise(int16_t freq, int16_t amp, int16_t freqDelta, int16_t ampDelta) {
+void noise(int16_t freq, int16_t amp, int16_t freqDelta, int16_t ampDelta){
 	_freq = freq;
 	_amp = amp;
 	_freqDelta = freqDelta;
@@ -44,7 +43,7 @@ void noise(int16_t freq, int16_t amp, int16_t freqDelta, int16_t ampDelta) {
 	_playNoise = true;
 }
 
-void music(const char *melody, uint8_t melodyLength, uint16_t noteLength, int16_t amp, int16_t ampDelta) {
+void music(const char *melody, uint8_t melodyLength, uint16_t noteLength, int16_t amp, int16_t ampDelta){
 	_melody = melody;
 	_noteLength = noteLength;
 	_notePointer = 0;
@@ -54,7 +53,7 @@ void music(const char *melody, uint8_t melodyLength, uint16_t noteLength, int16_
 	_currentNote = 0;
 }
 
-void tone(int16_t frequency, int16_t volume) {
+void tone(int16_t frequency, int16_t volume){
 	uint8_t prescalarbits = 0b001;
 	uint32_t ocr = 0;
 
@@ -62,10 +61,8 @@ void tone(int16_t frequency, int16_t volume) {
 		volume = 0;
 		frequency = 3000;
 	}
-	if (volume < 0)
-		volume = 0;
-	if (volume > 255)
-		volume = 255;
+	if (volume < 0) volume = 0;
+	if (volume > 255) volume = 255;
 
 	ocr = F_CPU / frequency / 2 - 1;
 	prescalarbits = 0b001;  // ck/1: same for both timers
@@ -102,7 +99,7 @@ void tone(int16_t frequency, int16_t volume) {
 	analogWrite(SOUNDMINUSPIN, 255 - volume);
 }
 
-void soundPlay() {
+void soundPlay(){
 	_slowdown--;
 	if (_slowdown < 0) {
 		_slowdown = 7;
@@ -111,8 +108,7 @@ void soundPlay() {
 			if (_notePointer == 0) {
 				if (_melody[_currentNote] == MUTE)
 					tone(0, 0, 0, 0);
-				else if (_melody[_currentNote] != PAUSE)
-					tone(notes[_melody[_currentNote]], _melodyAmp, 0, _melodyAmpDelta);
+				else if (_melody[_currentNote] != PAUSE) tone(notes[_melody[_currentNote]], _melodyAmp, 0, _melodyAmpDelta);
 			}
 			_notePointer++;
 			if (_notePointer >= _noteLength) {
@@ -127,10 +123,8 @@ void soundPlay() {
 
 		_freq += _freqDelta;
 		_amp += _ampDelta;
-		if (_amp < 0)
-			_amp = 0;
+		if (_amp < 0) _amp = 0;
 		tone(_freq, _amp);
 	}
-	if (_playNoise)
-		_freq = rand() % _freq;		// TODO FIX THIS TO NOT SELF-REFERENCE
+	if (_playNoise) _freq = rand() % _freq;		// TODO FIX THIS TO NOT SELF-REFERENCE
 }

@@ -1,10 +1,3 @@
-/*
- * SoundController.h
- *
- *  Created on: Jan 5, 2021
- *      Author: hopper
- */
-
 #ifndef SOUNDCONTROLLER_H_
 #define SOUNDCONTROLLER_H_
 

@@ -1,31 +1,22 @@
-/*
- * LabyrinthGame.cpp
- *
- *  Created on: Jan 10, 2021
- *      Author: hopper
- */
 #include "LabyrinthGame.h"
 
-LabyrinthGame::LabyrinthGame() {
+LabyrinthGame::LabyrinthGame(){
+	generate(sizeX, sizeY);
 }
 
 // Bo-taoshi algorithm for maze generation
 // pillars at even intervals, and makes one wall for each pillar
-void LabyrinthGame::generate(int sizeX, int sizeY) {
+void LabyrinthGame::generate(int sizeX, int sizeY){
 	int x, y;
 
-	if (sizeX % 2 == 0)
-		sizeX++;					// we need odd sizes
-	if (sizeY % 2 == 0)
-		sizeY++;
+	if (sizeX % 2 == 0) sizeX++;					// we need odd sizes
+	if (sizeY % 2 == 0) sizeY++;
 	this->sizeX = sizeX;
 	this->sizeY = sizeY;
 
-	if (labyrinth != NULL)
-		free(labyrinth);
+	if (labyrinth != NULL) free(labyrinth);
 	labyrinth = (uint8_t*) malloc(sizeX * sizeY / 4 + 1);
-	if (labyrinth == NULL)
-		Serial.println("malloc problem");
+	if (labyrinth == NULL) Serial.println("malloc problem");
 
 	for (y = 0; y < sizeY; y++)			// clear all
 		for (x = 0; x < sizeX; x++)
@@ -34,18 +25,18 @@ void LabyrinthGame::generate(int sizeX, int sizeY) {
 		for (x = 2; x < sizeX - 1; x += 2) {
 			setPoint(x, y);							// set pillars
 			switch (rand() % 4) {			// and one of the adjacent walls
-			case 0:
-				setPoint(x, y - 1);
-				break;
-			case 1:
-				setPoint(x, y + 1);
-				break;
-			case 2:
-				setPoint(x - 1, y);
-				break;
-			case 3:
-				setPoint(x + 1, y);
-				break;
+				case 0:
+					setPoint(x, y - 1);
+					break;
+				case 1:
+					setPoint(x, y + 1);
+					break;
+				case 2:
+					setPoint(x - 1, y);
+					break;
+				case 3:
+					setPoint(x + 1, y);
+					break;
 			}
 		}
 	for (y = 0; y < sizeY; y++) {			// set outer border
@@ -63,14 +54,10 @@ void LabyrinthGame::generate(int sizeX, int sizeY) {
 	posY = sizeY - 1;
 }
 
-void LabyrinthGame::play() {
+void LabyrinthGame::play(){
 	clear(0);
 
-	if (labyrinth == NULL)
-		generate(sizeX, sizeY);
-
-	if (getKeyClick(4))
-		showHints = !showHints;
+	if (getKeyClick(4)) showHints = !showHints;
 
 	if (getKeyClick(1) && (get(posX, posY - 1) != 1)) {
 		if (posY > 0) {
@@ -101,18 +88,18 @@ void LabyrinthGame::play() {
 		for (int x = -2; x < 2; x++)
 			if ((y + posY >= 0) && (y + posY < sizeY) && (x + posX >= 0) && (x + posX < sizeX)) {
 				switch (get(x + posX, y + posY)) {
-				case 0:
-					set(x + 2, y + 2, 0);
-					break;
-				case 1:
-					set(x + 2, y + 2, 15);
-					break;
-				case 2:
-					if (showHints)
-						set(x + 2, y + 2, 1);
-					else
+					case 0:
 						set(x + 2, y + 2, 0);
-					break;
+						break;
+					case 1:
+						set(x + 2, y + 2, 15);
+						break;
+					case 2:
+						if (showHints)
+							set(x + 2, y + 2, 1);
+						else
+							set(x + 2, y + 2, 0);
+						break;
 				}
 			} else
 				set(x + 2, y + 2, 0);				//outside of labyrinth

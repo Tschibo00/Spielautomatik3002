@@ -1,10 +1,3 @@
-/*
- * ToneTest.cpp
- *
- *  Created on: Jan 5, 2021
- *      Author: hopper
- */
-
 #include "ToneTest.h"
 
 ToneTest::ToneTest(){

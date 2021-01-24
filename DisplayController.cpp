@@ -7,6 +7,7 @@ int ledMatrixPin[5] = { 2, 13, 4, 3, 6 };
 char _displayInternal[20];
 uint8_t displayWait = 1;
 uint8_t currentRow = 0;
+// 15, 7, 3, 1 as available brightness, row-wise
 char palette[5] = { 0, 1, 3, 7, 15 };
 uint8_t screen[20];
 
@@ -109,6 +110,7 @@ void showCharacter(unsigned char c){
 void drawLine(int x, int y, int dx, int dy, int steps, char color){
 	drawDottedLine(x, y, dx, dy, steps, color, color);
 }
+
 void drawDottedLine(int x, int y, int dx, int dy, int steps, char color1, char color2){
 	for (int i = 0; i < steps; i++) {
 		set(x, y, i % 2 ? color1 : color2);
@@ -116,17 +118,20 @@ void drawDottedLine(int x, int y, int dx, int dy, int steps, char color1, char c
 		y += dy;
 	}
 }
+
 void drawRectangle(int x, int y, int width, int height, char color){
 	drawLine(x, y, 1, 0, width, color);
 	drawLine(x, y + height - 1, 1, 0, width, color);
 	drawLine(x, y + 1, 0, 1, height - 2, color);
 	drawLine(x + width - 1, y + 1, 0, 1, height - 2, color);
 }
+
 void drawBox(int x, int y, int width, int height, char color){
 	for (int yy = y; yy < y + height; yy++)
 		for (int xx = x; xx < x + width; xx++)
 			set(xx, yy, color);
 }
+
 void drawFade(char c0, char c1, char c2, char c3, char c4){
 	for (char i = 0; i < 4; i++) {
 		screen[i] = c0;
@@ -136,11 +141,19 @@ void drawFade(char c0, char c1, char c2, char c3, char c4){
 		screen[i + 16] = c4;
 	}
 }
+
 void set(int x, int y, char color){
 	if ((x >= 0) && (x < 4) && (y >= 0) && (y < 5)) screen[y * 4 + x] = color;
 }
+
 char get(int x, int y){
 	return screen[y * 4 + x];
 }
-char*getPalette(){return palette;}
-uint8_t*getScreen(){return screen;}
+
+char* getPalette(){
+	return palette;
+}
+
+uint8_t* getScreen(){
+	return screen;
+}

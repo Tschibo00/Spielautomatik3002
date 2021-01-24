@@ -1,9 +1,3 @@
-/*
- * WuerfelGame.cpp
- *
- *  Created on: Dec 29, 2020
- *      Author: hopper
- */
 #include "AsteroidGame.h"
 
 AsteroidGame::AsteroidGame(){
@@ -72,7 +66,8 @@ void AsteroidGame::advanceAsteroids(){
 		if (asteroids[i] >= 0) lost = true;
 	if (lost) {
 		gameover(level);
-		asteroidRowSpeed = ASTEROIDSTARTSPEED;
+		asteroidRowSpeed = ASTEROIDSTARTSPEED
+		;
 		level = 1;
 		initLevel();
 	}

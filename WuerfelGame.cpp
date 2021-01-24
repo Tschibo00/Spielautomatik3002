@@ -1,15 +1,9 @@
-/*
- * WuerfelGame.cpp
- *
- *  Created on: Dec 29, 2020
- *      Author: hopper
- */
 #include "WuerfelGame.h"
 
-WuerfelGame::WuerfelGame() {
+WuerfelGame::WuerfelGame(){
 }
 
-void WuerfelGame::play() {
+void WuerfelGame::play(){
 	char select = getNumberStatus();
 	if (select != lastNumber) {
 		clear(0);
@@ -25,7 +19,7 @@ void WuerfelGame::play() {
 	}
 }
 
-void WuerfelGame::setRandomLed() {
+void WuerfelGame::setRandomLed(){
 	char led;
 	bool found = false;
 	while (!found) {

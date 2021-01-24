@@ -6,11 +6,6 @@
 #include "KeyboardController.h"
 #include "SoundController.h"
 #include "GameController.h"
-#include "WuerfelGame.h"
-#include "AsteroidGame.h"
-#include "LabyrinthGame.h"
-#include "FarmGame.h"
-#include "ToneTest.h"
 
 #if defined(__AVR_ATmega328P__)
 // Timer2 is the same on the mega328 and mega168
@@ -23,19 +18,10 @@ void setup(){
 	pinMode(11, OUTPUT);
 
 	Serial.begin(115200);
-	Serial.println(freeMemory());
 	initKeyboardController();
-	Serial.println(freeMemory());
 	initDisplayController();
-	Serial.println(freeMemory());
 	initSoundController();
-	Serial.println(freeMemory());
-	registerGame(new WuerfelGame());
-	registerGame(new AsteroidGame());
-	registerGame(new LabyrinthGame());
-	registerGame(new FarmGame());
-	registerGame(new ToneTest());
-	Serial.println(freeMemory());
+	initGameController();
 
 	cli(); //disable interrupts
 	//set timer1 interrupt at 7,8khz
@@ -54,7 +40,6 @@ void setup(){
 	sei();  //enable interrupts
 
 	BatteryMonitor::checkAndShow();
-
 }
 
 int freeMemory(){
