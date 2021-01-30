@@ -49,16 +49,16 @@ class FarmGame: public Game {
 		char daytime = 0;	// 0=morgen,1=vormittag,2=mittag,3=nachmittag, 4=abend, 5=nacht
 		char happiness = 0;
 		char hasStall = 1;
-		char hasHaus = 1;
-		char hasSchweine = 1;
-		char hasChicken = 1;
-		char hasCage = 1;
+		char hasHaus = 0;
+		char hasSchweine = 0;
+		char hasChicken = 0;
+		char hasCage = 0;
 		unsigned char day = 0;
-		uint16_t cows = 10;
-		uint16_t pigs = 10;
-		uint16_t sheep = 10;
-		uint16_t chicken = 10;
-		uint16_t birds = 1;
+		uint16_t cows = 1;
+		uint16_t pigs = 0;
+		uint16_t sheep = 0;
+		uint16_t chicken = 0;
+		uint16_t birds = 0;
 
 		void showFarm();
 		void enter(char newState, int startPosX, int startPosY);
@@ -73,17 +73,6 @@ class FarmGame: public Game {
 		inline int ry(int coord){
 			return coord - posY + 2;
 		}
-
-		uint8_t faces[60] = { 3, 15, 15, 3, 15, 15, 15, 15, 15, 1, 1, 15, 1, 15, 15, 1, 15, 15, 15, 15, 3, 15, 15, 3, 15, 15, 15, 15, 15, 15,
-				15, 15, 1, 1, 1, 1, 15, 15, 15, 15, 3, 15, 15, 3, 15, 15, 15, 15, 15, 15, 15, 15, 1, 15, 15, 1, 15, 1, 1, 15 };
-		uint8_t goods[100] = { 15, 15, 15, 15, 15, 0, 0, 15, 15, 0, 0, 15, 15, 0, 0, 15, 15, 15, 15, 15, 0, 0, 15, 0, 0, 15, 15, 15, 15, 15,
-				15, 15, 15, 5, 5, 15, 15, 15, 15, 15, 3, 3, 3, 3, 3, 0, 0, 3, 3, 0, 0, 3, 3, 3, 3, 3, 3, 0, 0, 3, 3, 3, 3, 3, 3, 0, 0, 3, 3, 0,
-				0, 3, 3, 0, 0, 3, 3, 3, 3, 3, 15, 15, 15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15, 15, 15, 0 };
-		uint8_t werbung[140] = { 0, 0, 0, 0, 15, 15, 15, 15, 15, 0, 0, 15, 15, 15, 15, 15, 15, 0, 0, 15, 15, 0, 15, 0, 0, 15, 0, 15, 15, 0,
-				15, 0, 0, 15, 0, 15, 15, 0, 15, 0, 15, 0, 0, 0, 15, 15, 15, 15, 0, 0, 0, 15, 15, 15, 15, 15, 15, 0, 0, 0, 0, 15, 15, 0, 15, 0,
-				0, 15, 15, 0, 0, 15, 0, 15, 15, 0, 2, 2, 2, 2, 0, 15, 15, 0, 0, 15, 15, 0, 15, 15, 15, 15, 15, 2, 2, 15, 15, 15, 15, 15, 0, 15,
-				15, 0, 15, 2, 2, 15, 2, 15, 15, 2, 15, 2, 2, 15, 0, 15, 15, 0, 15, 15, 15, 15, 15, 2, 2, 15, 15, 2, 2, 15, 15, 2, 2, 15, 15, 2,
-				15, 15 };
 
 	public:
 		FarmGame();

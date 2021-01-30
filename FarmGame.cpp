@@ -1,5 +1,18 @@
 #include "FarmGame.h"
 
+static const uint8_t faces[60] = { 3, 15, 15, 3, 15, 15, 15, 15, 15, 1, 1, 15, 1, 15, 15, 1, 15, 15, 15, 15, 3, 15, 15, 3, 15, 15, 15, 15,
+		15, 15, 15, 15, 1, 1, 1, 1, 15, 15, 15, 15, 3, 15, 15, 3, 15, 15, 15, 15, 15, 15, 15, 15, 1, 15, 15, 1, 15, 1, 1, 15 };
+static const uint8_t goods[100] = { 15, 15, 15, 15, 15, 0, 0, 15, 15, 0, 0, 15, 15, 0, 0, 15, 15, 15, 15, 15, 0, 0, 15, 0, 0, 15, 15, 15,
+		15, 15, 15, 15, 15, 5, 5, 15, 15, 15, 15, 15, 3, 3, 3, 3, 3, 0, 0, 3, 3, 0, 0, 3, 3, 3, 3, 3, 3, 0, 0, 3, 3, 3, 3, 3, 3, 0, 0, 3, 3,
+		0, 0, 3, 3, 0, 0, 3, 3, 3, 3, 3, 15, 15, 15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15, 15, 15, 0 };
+static const uint8_t tierBild[100] = { 0, 0, 0, 3, 0, 0, 0, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5,
+		5, 0, 5, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 15, 15, 15, 15, 0, 0, 15, 0, 0, 0, 0, 7, 0, 0, 7, 7, 7, 7, 7, 7,
+		7, 7, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 5, 5, 0, 0, 0, 5, 0, 0 };
+static const uint8_t werbung[140] = { 0, 0, 0, 0, 15, 15, 15, 15, 15, 0, 0, 15, 15, 15, 15, 15, 15, 0, 0, 15, 15, 0, 15, 0, 0, 15, 0, 15,
+		15, 0, 15, 0, 0, 15, 0, 15, 15, 0, 15, 0, 15, 0, 0, 0, 15, 15, 15, 15, 0, 0, 0, 15, 15, 15, 15, 15, 15, 0, 0, 0, 0, 15, 15, 0, 15, 0,
+		0, 15, 15, 0, 0, 15, 0, 15, 15, 0, 2, 2, 2, 2, 0, 15, 15, 0, 0, 15, 15, 0, 15, 15, 15, 15, 15, 2, 2, 15, 15, 15, 15, 15, 0, 15, 15, 0,
+		15, 2, 2, 15, 2, 15, 15, 2, 15, 2, 2, 15, 0, 15, 15, 0, 15, 15, 15, 15, 15, 2, 2, 15, 15, 2, 2, 15, 15, 2, 2, 15, 15, 2, 15, 15 };
+
 FarmGame::FarmGame(){
 	tierPosX = (char*) malloc(MAX_TIER);
 	tierPosY = (char*) malloc(MAX_TIER);
@@ -62,7 +75,7 @@ void FarmGame::play(){
 					tone(2500, 255, 0, -1);
 					switch (daytime) {
 						case 0:
-							money = +500;
+							money += 500;
 							break;
 						case 1:
 							// 20 kuehe oder schweine
@@ -81,9 +94,16 @@ void FarmGame::play(){
 			}
 			break;
 		case KAUFEN:
-			copy(goods + (kaufState - STALL) * 20);
-			if (millis() - blinkKaufen < 300) for (char i = 0; i < 20; i++)
-				getScreen()[i] += 10 - (millis() - blinkKaufen) / 30;
+			if (state == FARM) {
+				copy(goods + (kaufState - STALL) * 20);
+				if (millis() - blinkKaufen < 300) for (char i = 0; i < 20; i++)
+					getScreen()[i] += 10 - (millis() - blinkKaufen) / 30;
+			}
+			if (state == MARKT) {
+				copy(tierBild + kaufState * 20);
+				if (millis() - blinkKaufen < 300) for (char i = 0; i < 20; i++)
+					getScreen()[i] += 10 - (millis() - blinkKaufen) / 30;
+			}
 			break;
 	}
 
@@ -131,7 +151,8 @@ void FarmGame::play(){
 		case 3:
 			if (globalState == KAUFEN) {
 				kaufState--;
-				if (kaufState < STALL) kaufState = SCHWEINE;
+				if (state == FARM && kaufState < STALL) kaufState = SCHWEINE;
+				if (state == MARKT && kaufState < KUH) kaufState = VOGEL;
 			} else {
 				if (getScreen()[9] < 4) {
 					posX--;
@@ -145,7 +166,8 @@ void FarmGame::play(){
 			switch (globalState) {
 				case KAUFEN:
 					kaufState++;
-					if (kaufState > SCHWEINE) kaufState = STALL;
+					if (state == FARM && kaufState > SCHWEINE) kaufState = STALL;
+					if (state == MARKT && kaufState > VOGEL) kaufState = KUH;
 					break;
 				case STATUS:
 					globalState = WERBUNG;
@@ -198,7 +220,14 @@ void FarmGame::play(){
 		case 4:
 			switch (globalState) {
 				case RUNNING:
-					globalState = KAUFEN;
+					if (state == FARM) {
+						globalState = KAUFEN;
+						kaufState = STALL;
+					}
+					if (state == MARKT) {
+						globalState = KAUFEN;
+						kaufState = KUH;
+					}
 					break;
 				case STATUS:
 					globalState = WERBUNG;
@@ -206,44 +235,84 @@ void FarmGame::play(){
 					werbungPointer = 0;
 					break;
 				case KAUFEN:
-					switch (kaufState) {
-						case STALL:
-							if (money >= 500) {
-								hasStall++;
-								money -= 500;
-								blinkKaufen = millis();
-							}
-							break;
-						case HAUS:
-							if (money >= 500) {
-								hasHaus++;
-								money -= 500;
-								blinkKaufen = millis();
-							}
-							break;
-						case CAGE:
-							if (money >= 100) {
-								hasCage++;
-								money -= 100;
-								blinkKaufen = millis();
-							}
-							break;
-						case CHICKEN:
-							if (money >= 50) {
-								hasChicken++;
-								money -= 50;
-								blinkKaufen = millis();
-							}
-							break;
-						case SCHWEINE:
-							if (money >= 200) {
-								hasSchweine++;
-								money -= 200;
-								blinkKaufen = millis();
-							}
-							break;
+					if (state == FARM) {
+						switch (kaufState) {
+							case STALL:
+								if (money >= 500) {
+									hasStall++;
+									money -= 500;
+									blinkKaufen = millis();
+								}
+								break;
+							case HAUS:
+								if (money >= 500) {
+									hasHaus++;
+									money -= 500;
+									blinkKaufen = millis();
+								}
+								break;
+							case CAGE:
+								if (money >= 100) {
+									hasCage++;
+									money -= 100;
+									blinkKaufen = millis();
+								}
+								break;
+							case CHICKEN:
+								if (money >= 50) {
+									hasChicken++;
+									money -= 50;
+									blinkKaufen = millis();
+								}
+								break;
+							case SCHWEINE:
+								if (money >= 200) {
+									hasSchweine++;
+									money -= 200;
+									blinkKaufen = millis();
+								}
+								break;
+						}
 					}
-					// kaufen vom ausgewaehlten
+					if (state == MARKT) {
+						switch (kaufState) {
+							case KUH:
+								if (money >= 20) {
+									cows++;
+									money -= 20;
+									blinkKaufen = millis();
+								}
+								break;
+							case SCHAF:
+								if (money >= 20) {
+									sheep++;
+									money -= 20;
+									blinkKaufen = millis();
+								}
+								break;
+							case SCHWEIN:
+								if (money >= 30) {
+									pigs++;
+									money -= 30;
+									blinkKaufen = millis();
+								}
+								break;
+							case HUHN:
+								if (money >= 5) {
+									chicken++;
+									money -= 5;
+									blinkKaufen = millis();
+								}
+								break;
+							case VOGEL:
+								if (money >= 10) {
+									birds++;
+									money -= 10;
+									blinkKaufen = millis();
+								}
+								break;
+						}
+					}
 			}
 			break;
 	}
@@ -466,7 +535,7 @@ void FarmGame::tierSound(char tierType){
 		case VOGEL:
 			tone(500, 1000, 300, -2);
 			break;
-		case WEIDE:
+		case WEIDE:								// grillen
 			tone(500, 500, 2000, -1);
 			break;
 	}
