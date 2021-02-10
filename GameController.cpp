@@ -1,13 +1,15 @@
 #include "GameController.h"
+
 #include <math.h>
-#include "WuerfelGame.h"
-#include "AsteroidGame.h"
-#include "LabyrinthGame.h"
-#include "FarmGame.h"
-#include "ToneTest.h"
+#include "avr/pgmspace.h"
+
 #include "DisplayController.h"
 #include "SoundController.h"
-#include "avr/pgmspace.h"
+#include "AsteroidGame.h"
+#include "FarmGame.h"
+#include "LabyrinthGame.h"
+#include "ToneTest.h"
+#include "WuerfelGame.h"
 
 #define GAME_COUNT 5
 Game *runningGame = NULL;

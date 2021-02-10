@@ -5,18 +5,19 @@
 #define FARM 0
 #define HAUS_OG 1
 #define MARKT 2
-#define STALL 3
-#define HAUS 4
-#define CAGE 5
-#define CHICKEN 6
-#define SCHWEINE 7
-#define WEIDE 8
+#define STALL 5
+#define HAUS 6
+#define CAGE 7
+#define CHICKEN 8
+#define SCHWEINE 9
+#define WEIDE 10
 
 #define RUNNING 0
 #define GELD 1
 #define STATUS 2
 #define KAUFEN 3
 #define WERBUNG 4
+#define VERKAUFEN 5
 
 #define NONE -1
 #define KUH 0
@@ -47,21 +48,35 @@ class FarmGame: public Game {
 		// persistent values
 		unsigned long money = 20000;
 		char daytime = 0;	// 0=morgen,1=vormittag,2=mittag,3=nachmittag, 4=abend, 5=nacht
+		uint16_t day = 1;
 		char happiness = 0;
-		char hasStall = 1;
-		char hasHaus = 0;
-		char hasSchweine = 0;
-		char hasChicken = 0;
-		char hasCage = 0;
-		unsigned char day = 0;
+		uint16_t hasStall = 1;
+		uint16_t hasHaus = 0;
+		uint16_t hasSchweine = 0;
+		uint16_t hasChicken = 0;
+		uint16_t hasCage = 0;
 		uint16_t cows = 1;
 		uint16_t pigs = 0;
 		uint16_t sheep = 0;
 		uint16_t chicken = 0;
 		uint16_t birds = 0;
+		uint16_t cowsFood = 0;
+		uint16_t pigsFood = 0;
+		uint16_t sheepFood = 0;
+		uint16_t chickenFood = 0;
+		uint16_t birdsFood = 0;
+		bool cowsFed = false;
+		bool pigsFed = false;
+		bool sheepFed = false;
+		bool chickenFed = false;
+		bool birdsFed = false;
+		uint16_t cowsProduct=0;
+		uint16_t sheepProduct=0;
+		uint16_t pigsProduct=0;
+		uint16_t chickenProduct=0;
 
 		void showFarm();
-		void enter(char newState, int startPosX, int startPosY);
+		void enter(char newGlobalState, char newState, int startPosX, int startPosY);
 		void initTiere(uint16_t count, char type, int x, int y, int dx, int dy);
 		void drawTiere();
 		void deinitTiere();
@@ -73,6 +88,11 @@ class FarmGame: public Game {
 		inline int ry(int coord){
 			return coord - posY + 2;
 		}
+		void increaseDayTime();
+		void productKaufen(uint16_t *product, uint16_t price, uint16_t amount);
+		void productVerkaufen(uint16_t *product, uint16_t price);
+		bool onMarktTiere();
+		bool onMarktFutter();
 
 	public:
 		FarmGame();

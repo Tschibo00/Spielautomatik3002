@@ -1,5 +1,7 @@
 #include "DisplayController.h"
+
 #include "avr/pgmspace.h"
+
 #include "font.h"
 
 int ledLatchPin[4] = { A0, A1, A2, A3 };

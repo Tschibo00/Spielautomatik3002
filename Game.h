@@ -2,6 +2,7 @@
 #define GAME_H_
 
 #include <Arduino.h>
+
 #include "DisplayController.h"
 #include "KeyboardController.h"
 #include "SoundController.h"

@@ -3,16 +3,14 @@
 
 #include "BatteryMonitor.h"
 #include "DisplayController.h"
+#include "GameController.h"
 #include "KeyboardController.h"
 #include "SoundController.h"
-#include "GameController.h"
 
 #if defined(__AVR_ATmega328P__)
 // Timer2 is the same on the mega328 and mega168
 #define __AVR_ATmega168__
 #endif
-
-extern char *__brkval;
 
 void setup(){
 	pinMode(11, OUTPUT);
@@ -40,11 +38,6 @@ void setup(){
 	sei();  //enable interrupts
 
 	BatteryMonitor::checkAndShow();
-}
-
-int freeMemory(){
-	char top;
-	return &top - __brkval;
 }
 
 ISR(TIMER1_COMPA_vect){
