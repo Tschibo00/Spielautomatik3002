@@ -9,7 +9,7 @@ void ToneTest::play(){
 	char key = getNumberClick();
 
 	if (key >= 0) ledpos = (ledpos + 1) % 20;
-/*
+
 	switch (key) {
 		case 0:
 			music(victoryMusic, 5, 130, 600, -4);
@@ -48,7 +48,6 @@ void ToneTest::play(){
 			noise(200, 350, 30, -1);
 			break;
 	}
-*/
 
 	getScreen()[ledpos] = 15;
 

@@ -124,7 +124,9 @@ void soundPlay(){
 		_freq += _freqDelta;
 		_amp += _ampDelta;
 		if (_amp < 0) _amp = 0;
-		tone(_freq, _amp);
+		if (_playNoise)
+			tone(random(_freq), _amp);
+		else
+			tone(_freq, _amp);
 	}
-	if (_playNoise) _freq = rand() % _freq;		// TODO FIX THIS TO NOT SELF-REFERENCE
 }

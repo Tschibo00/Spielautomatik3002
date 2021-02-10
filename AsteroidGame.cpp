@@ -75,7 +75,7 @@ void AsteroidGame::advanceAsteroids(){
 
 void AsteroidGame::setFirstRow(){
 	for (uint8_t i = 0; i < 4; i++)
-		asteroids[i] = getPalette()[(rand() % 4) + 1];
+		asteroids[i] = getPalette()[(random(4)) + 1];
 }
 
 void AsteroidGame::initLevel(){

@@ -24,7 +24,7 @@ void LabyrinthGame::generate(int sizeX, int sizeY){
 	for (y = 2; y < sizeY - 1; y += 2)
 		for (x = 2; x < sizeX - 1; x += 2) {
 			setPoint(x, y);							// set pillars
-			switch (rand() % 4) {			// and one of the adjacent walls
+			switch (random(4)) {						// and one of the adjacent walls
 				case 0:
 					setPoint(x, y - 1);
 					break;
@@ -62,25 +62,25 @@ void LabyrinthGame::play(){
 	if (getKeyClick(1) && (get(posX, posY - 1) != 1)) {
 		if (posY > 0) {
 			posY--;
-			noise(rand() % 1700 + 200, 170, 0, -4);
+			noise(random(1700) + 200, 170, 0, -4);
 		}
 	}
 	if (getKeyClick(3) && (get(posX - 1, posY) != 1)) {
 		if (posX > 0) {
 			posX--;
-			noise(rand() % 1700 + 200, 170, 0, -4);
+			noise(random(1700) + 200, 170, 0, -4);
 		}
 	}
 	if (getKeyClick(5) && (get(posX + 1, posY) != 1)) {
 		if (posX < sizeX - 1) {
 			posX++;
-			noise(rand() % 1700 + 200, 170, 0, -4);
+			noise(random(1700) + 200, 170, 0, -4);
 		}
 	}
 	if (getKeyClick(7) && (get(posX, posY + 1) != 1)) {
 		if (posY < sizeY - 1) {
 			posY++;
-			noise(rand() % 1700 + 200, 170, 0, -4);
+			noise(random(1700) + 200, 170, 0, -4);
 		}
 	}
 

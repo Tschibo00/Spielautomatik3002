@@ -99,7 +99,7 @@ void FarmGame::play(){
 			} else {
 				if (getScreen()[6] < 4) {
 					posY--;
-					noise(rand() % 1700 + 200, 170, 0, -4);
+					noise(random(1700) + 200, 170, 0, -4);
 					logPosition();
 				}
 				if ((state == FARM) && posX == 4 && posY == 7 && hasHaus) enter(globalState, HAUS, 5, 8);
@@ -140,7 +140,7 @@ void FarmGame::play(){
 				if (getScreen()[9] < 4) {
 					posX--;
 					logPosition();
-					noise(rand() % 1700 + 200, 170, 0, -4);
+					noise(random(1700) + 200, 170, 0, -4);
 				}
 				if (state == WEIDE && posX == 14) enter(globalState, FARM, posX, posY);
 			}
@@ -162,7 +162,7 @@ void FarmGame::play(){
 					if (getScreen()[11] < 4) {
 						posX++;
 						logPosition();
-						noise(rand() % 1700 + 200, 170, 0, -4);
+						noise(random(1700) + 200, 170, 0, -4);
 					}
 					if (state == FARM && posX == 14) enter(globalState, WEIDE, posX, posY);
 					break;
@@ -178,7 +178,7 @@ void FarmGame::play(){
 				if (getScreen()[14] < 4) {
 					posY++;
 					logPosition();
-					noise(rand() % 1700 + 200, 170, 0, -4);
+					noise(random(1700) + 200, 170, 0, -4);
 				}
 				if (state == HAUS && posX == 5 && posY == 9) enter(globalState, FARM, 4, 8);
 				if (state == STALL && posX == 5 && posY == 8 + hasStall) enter(globalState, FARM, 9, 9);
@@ -548,8 +548,8 @@ void FarmGame::initTiere(uint16_t count, char type, int x, int y, int dx, int dy
 	if (tierPosX == NULL) return;
 	for (uint16_t i = 0; i < count; i++) {
 		tierType[totalTiere + i] = type;
-		tierPosX[totalTiere + i] = rand() % dx + x;
-		tierPosY[totalTiere + i] = rand() % dy + y;
+		tierPosX[totalTiere + i] = random(dx) + x;
+		tierPosY[totalTiere + i] = random(dy) + y;
 	}
 	totalTiere += count;
 }
@@ -557,7 +557,7 @@ void FarmGame::initTiere(uint16_t count, char type, int x, int y, int dx, int dy
 void FarmGame::drawTiere(){
 	if (tierPosX == NULL) return;
 	for (uint16_t i = 0; i < totalTiere; i++) {
-		if (rx(tierPosX[i] >= 0 && rx(tierPosX[i] < 4) && ry(tierPosY[i]) >= 0 && ry(tierPosY[i]) < 5)) switch (rand() % 300) {
+		if (rx(tierPosX[i] >= 0 && rx(tierPosX[i] < 4) && ry(tierPosY[i]) >= 0 && ry(tierPosY[i]) < 5)) switch (random(300)) {
 			case 0:
 				if (rx(tierPosX[i]) > 0 && getScreen()[ry(tierPosY[i] * 4 + rx(tierPosX[i]) - 1)] == 0) tierPosX[i]--;
 				break;
@@ -603,7 +603,7 @@ void FarmGame::logPosition(){
 }
 
 void FarmGame::tierSound(char tierType, bool force){
-	if ((rand() % 1400 == 0) || force) switch (tierType) {
+	if ((random(1500) == 0) || force) switch (tierType) {
 		case KUH:
 			tone(500, 255, 10, -2);
 			break;

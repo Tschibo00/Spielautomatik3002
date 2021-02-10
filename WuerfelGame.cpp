@@ -23,7 +23,7 @@ void WuerfelGame::setRandomLed(){
 	char led;
 	bool found = false;
 	while (!found) {
-		led = rand() % 20;
+		led = random(20);
 		if (getScreen()[led] == 0) {
 			getScreen()[led] = 15;
 			found = true;
