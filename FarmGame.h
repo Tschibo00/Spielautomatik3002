@@ -39,6 +39,7 @@ class FarmGame: public Game {
 		unsigned long blinkKaufen = 0;
 		unsigned long werbungStart = 0;
 		char werbungPointer = 0;
+		unsigned long stopTimeDisplay = 0;
 
 		char *tierPosX = NULL;
 		char *tierPosY = NULL;
@@ -70,10 +71,10 @@ class FarmGame: public Game {
 		bool sheepFed = false;
 		bool chickenFed = false;
 		bool birdsFed = false;
-		uint16_t cowsProduct=0;
-		uint16_t sheepProduct=0;
-		uint16_t pigsProduct=0;
-		uint16_t chickenProduct=0;
+		uint16_t cowsProduct = 0;
+		uint16_t sheepProduct = 0;
+		uint16_t pigsProduct = 0;
+		uint16_t chickenProduct = 0;
 
 		void showFarm();
 		void enter(char newGlobalState, char newState, int startPosX, int startPosY);
@@ -81,7 +82,7 @@ class FarmGame: public Game {
 		void drawTiere();
 		void deinitTiere();
 		void logPosition();
-		void tierSound(char tierType);
+		void tierSound(char tierType, bool force);
 		inline int rx(int coord){
 			return coord - posX + 2;
 		}
@@ -89,10 +90,11 @@ class FarmGame: public Game {
 			return coord - posY + 2;
 		}
 		void increaseDayTime();
-		void productKaufen(uint16_t *product, uint16_t price, uint16_t amount);
+		bool productKaufen(uint16_t *product, uint16_t price, uint16_t amount);
 		void productVerkaufen(uint16_t *product, uint16_t price);
 		bool onMarktTiere();
 		bool onMarktFutter();
+		void drawDaytime();
 
 	public:
 		FarmGame();
