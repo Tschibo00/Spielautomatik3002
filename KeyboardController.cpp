@@ -1,9 +1,11 @@
 #include "KeyboardController.h"
 
+#define DEBOUNCE 30		// ms for debounce, increase for longer debounce period
+
 int keyLatchPin[3] = { 9, 8, 7 };
 int keyMatrixPin[4] = { 10, 12, A4, A5 };
 bool keyStatus[12];
-bool keyLocked[12];
+unsigned long keyLocked[12];
 
 void initKeyboardController(){
 	uint8_t i;
@@ -12,7 +14,7 @@ void initKeyboardController(){
 	for (i = 0; i < 4; i++)
 		pinMode(keyMatrixPin[i], INPUT_PULLUP);
 	for (i = 0; i < 12; i++)
-		keyLocked[i] = false;
+		keyLocked[i] = millis();
 }
 
 void scanKeyboard(){
@@ -32,16 +34,15 @@ bool getKeyStatus(uint8_t key){
 
 bool getKeyClick(uint8_t key){
 	if (getKeyStatus(key)) {
-		if (keyLocked[key])
+		if (keyLocked[key] > millis()) {					// still pressed?
+			keyLocked[key] = millis() + DEBOUNCE;		// set debounce period
 			return false;
-		else {
-			keyLocked[key] = true;
+		} else {
+			keyLocked[key] = millis() + DEBOUNCE;		// set debounce period
 			return true;
 		}
-	} else {
-		keyLocked[key] = false;
+	} else
 		return false;
-	}
 }
 
 char getNumberStatus(){
