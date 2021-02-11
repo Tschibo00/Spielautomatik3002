@@ -1,7 +1,5 @@
 #include "DisplayController.h"
-
 #include "avr/pgmspace.h"
-
 #include "font.h"
 
 int ledLatchPin[4] = { A0, A1, A2, A3 };
@@ -93,9 +91,10 @@ void showCharacter(unsigned char c, int xOffset){
 	uint8_t b;
 	char x, y;
 	unsigned char cc = 0;
-	if ((c >= 97) && (c <= 122)) cc = c - 86;
-	if ((c >= 65) && (c <= 90)) cc = c - 54;
-	if ((c >= 48) && (c <= 57)) cc = c - 47;
+	if ((c >= 97) && (c <= 122)) cc = c - 86;		// lower case
+	if ((c >= 65) && (c <= 90)) cc = c - 54;		// upper case
+	if ((c >= 48) && (c <= 57)) cc = c - 47;		// numbers
+	if ((c >= 58) && (c <= 62)) cc = c - 21;		// tiere
 	for (y = 0; y < 5; y++) {
 		b = pgm_read_byte(font + cc * 5 + y);
 		for (x = 3; x >= 0; x--) {

@@ -12,12 +12,15 @@
 #define SCHWEINE 7
 #define WEIDE 8
 
+// global states
 #define RUNNING 0
 #define GELD 1
 #define STATUS 2
 #define KAUFEN 3
 #define WERBUNG 4
 #define VERKAUFEN 5
+#define FUETTERN 6
+#define FUTTERMENGE 7
 
 #define NONE -1
 #define KUH 0
@@ -41,14 +44,12 @@ class FarmGame: public Game {
 		char werbungPointer = 0;
 		unsigned long stopTimeDisplay = 0;
 
-		char *tierPosX = NULL;
-		char *tierPosY = NULL;
-		char *tierType = NULL;
+		char *tierPosX = NULL, *tierPosY = NULL, *tierType = NULL;
 		uint16_t totalTiere = 0;
-		int16_t tierMinX, tierMaxX, tierMinY, tierMaxY;
+		int16_t tierMinX = 0, tierMaxX = 0, tierMinY = 0, tierMaxY = 0;
 
 		// persistent values
-		unsigned long money = 300;
+		unsigned long money = 20000;
 		char daytime = 0;	// 0=morgen,1=vormittag,2=mittag,3=nachmittag, 4=abend, 5=nacht
 		uint16_t day = 1;
 		char happiness = 0;
