@@ -149,7 +149,10 @@ void set(int x, int y, char color){
 }
 
 char get(int x, int y){
-	return screen[y * 4 + x];
+	if ((x >= 0) && (x < 4) && (y >= 0) && (y < 5))
+		return screen[y * 4 + x];
+	else
+		return -1;
 }
 
 char* getPalette(){

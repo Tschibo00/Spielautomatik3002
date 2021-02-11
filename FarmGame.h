@@ -5,12 +5,12 @@
 #define FARM 0
 #define HAUS_OG 1
 #define MARKT 2
-#define STALL 5
-#define HAUS 6
-#define CAGE 7
-#define CHICKEN 8
-#define SCHWEINE 9
-#define WEIDE 10
+#define STALL 3
+#define HAUS 4
+#define CAGE 5
+#define CHICKEN 6
+#define SCHWEINE 7
+#define WEIDE 8
 
 #define RUNNING 0
 #define GELD 1
@@ -45,9 +45,10 @@ class FarmGame: public Game {
 		char *tierPosY = NULL;
 		char *tierType = NULL;
 		uint16_t totalTiere = 0;
+		int16_t tierMinX, tierMaxX, tierMinY, tierMaxY;
 
 		// persistent values
-		unsigned long money = 20000;
+		unsigned long money = 300;
 		char daytime = 0;	// 0=morgen,1=vormittag,2=mittag,3=nachmittag, 4=abend, 5=nacht
 		uint16_t day = 1;
 		char happiness = 0;
@@ -66,7 +67,7 @@ class FarmGame: public Game {
 		uint16_t sheepFood = 0;
 		uint16_t chickenFood = 0;
 		uint16_t birdsFood = 0;
-		bool cowsFed = false;
+		bool cowsFed = true;
 		bool pigsFed = false;
 		bool sheepFed = false;
 		bool chickenFed = false;
@@ -95,6 +96,10 @@ class FarmGame: public Game {
 		bool onMarktTiere();
 		bool onMarktFutter();
 		void drawDaytime();
+		bool tierImStall();
+		uint16_t getPriceFarm(char product);
+		uint16_t getPriceTier(char product);
+		uint16_t getPriceFutter(char product);
 
 	public:
 		FarmGame();

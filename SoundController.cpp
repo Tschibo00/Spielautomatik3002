@@ -15,6 +15,8 @@ int16_t _melodyAmpDelta = 0;
 int8_t _currentNote = -1;
 int16_t _noteLength = 0;
 int16_t _notePointer = -1;
+int16_t oldVolume = -1;
+int16_t oldFrequency = -1;
 
 int16_t notes[60] = { 262, 277, 294, 311, 330, 349, 370, 392, 415, 440, 466, 494, 523, 554, 587, 622, 659, 698, 740, 784, 831, 880, 932,
 		988, 1047, 1109, 1175, 1245, 1319, 1397, 1480, 1568, 1661, 1760, 1865, 1976, 2093, 2217, 2349, 2489, 2637, 2794, 2960, 3136, 3322,
@@ -64,39 +66,47 @@ void tone(int16_t frequency, int16_t volume){
 	if (volume < 0) volume = 0;
 	if (volume > 255) volume = 255;
 
-	ocr = F_CPU / frequency / 2 - 1;
-	prescalarbits = 0b001;  // ck/1: same for both timers
-	if (ocr > 255) {
-		ocr = F_CPU / frequency / 2 / 8 - 1;
-		prescalarbits = 0b010;  // ck/8: same for both timers
+	if (volume == 0) frequency = 10;			// reset timer frequency if no sound is playing
 
+	if (frequency != oldFrequency) {
+		ocr = F_CPU / frequency / 2 - 1;
+		prescalarbits = 0b001;  // ck/1: same for both timers
 		if (ocr > 255) {
-			ocr = F_CPU / frequency / 2 / 32 - 1;
-			prescalarbits = 0b011;
+			ocr = F_CPU / frequency / 2 / 8 - 1;
+			prescalarbits = 0b010;  // ck/8: same for both timers
+
 			if (ocr > 255) {
-				ocr = F_CPU / frequency / 2 / 64 - 1;
-				prescalarbits = 0b100;
+				ocr = F_CPU / frequency / 2 / 32 - 1;
+				prescalarbits = 0b011;
 				if (ocr > 255) {
-					ocr = F_CPU / frequency / 2 / 128 - 1;
-					prescalarbits = 0b101;
+					ocr = F_CPU / frequency / 2 / 64 - 1;
+					prescalarbits = 0b100;
 					if (ocr > 255) {
-						ocr = F_CPU / frequency / 2 / 256 - 1;
-						prescalarbits = 0b110;
+						ocr = F_CPU / frequency / 2 / 128 - 1;
+						prescalarbits = 0b101;
 						if (ocr > 255) {
-							// can't do any better than /1024
-							ocr = F_CPU / frequency / 2 / 1024 - 1;
-							prescalarbits = 0b111;
+							ocr = F_CPU / frequency / 2 / 256 - 1;
+							prescalarbits = 0b110;
+							if (ocr > 255) {
+								// can't do any better than /1024
+								ocr = F_CPU / frequency / 2 / 1024 - 1;
+								prescalarbits = 0b111;
+							}
 						}
 					}
 				}
 			}
+
+			TCCR2B = (TCCR2B & 0b11111000) | prescalarbits;
+
+			OCR2A = ocr;
 		}
-
-		TCCR2B = (TCCR2B & 0b11111000) | prescalarbits;
-
-		OCR2A = ocr;
+		oldFrequency = frequency;
 	}
-	analogWrite(SOUNDMINUSPIN, 255 - volume);
+	if (volume != oldVolume) {
+		analogWrite(SOUNDMINUSPIN, 255 - volume);
+		oldVolume = volume;
+	}
 }
 
 void soundPlay(){
