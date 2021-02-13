@@ -49,13 +49,6 @@ void FlappyGame::advanceTunnel(){
 
 	progress++;
 	width = 10 - progress / 30;
-
-	for (char x = 0; x < 4; x++) {
-		Serial.print(tunnelUp[x]);
-		Serial.print(" - ");
-		Serial.println(tunnelDown[x]);
-	}
-	Serial.println("------");
 }
 
 void FlappyGame::move(){
@@ -88,7 +81,6 @@ void FlappyGame::move(){
 }
 
 void FlappyGame::drawTunnel(){
-//	drawRand(3 - progress % 4, 0, true, 1);
 	set(3 - progress % 4, (progress / 4 - pos) % 5, 1);
 	for (char x = 0; x < 4; x++) {
 		if (tunnelDown[x] - tunnelUp[x] == 6) drawRand(x, 0, true, 1);	// finish line
