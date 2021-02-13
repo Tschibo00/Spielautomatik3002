@@ -6,6 +6,7 @@
 #include "DisplayController.h"
 #include "KeyboardController.h"
 #include "SoundController.h"
+#include "MemController.h"
 
 static const char victoryScreen[20] = { 0, 0, 15, 15, 0, 0, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15 };
 static const char gameOverScreen[20] = { 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 0, 0, 15, 15, 0, 0, 15, 15 };
@@ -44,6 +45,10 @@ class Game {
 		}
 		;
 		virtual void play();
+		virtual bool needsPlayerSelection(){
+			return false;
+		}
+		virtual void selectPlayer(uint8_t player, bool resetSavedGame){};
 };
 
 #endif /* GAME_H_ */

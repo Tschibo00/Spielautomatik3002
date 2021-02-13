@@ -43,39 +43,43 @@ class FarmGame: public Game {
 		unsigned long werbungStart = 0;
 		char werbungPointer = 0;
 		unsigned long stopTimeDisplay = 0;
+		uint8_t currentPlayer = 0;
 
 		char *tierPosX = NULL, *tierPosY = NULL, *tierType = NULL;
 		uint16_t totalTiere = 0;
 		int16_t tierMinX = 0, tierMaxX = 0, tierMinY = 0, tierMaxY = 0;
 
+		struct SaveGame {
+				unsigned long money;
+				char daytime;	// 0=morgen,1=vormittag,2=mittag,3=nachmittag, 4=abend, 5=nacht
+				uint16_t day;
+				uint16_t hasStall;
+				uint16_t hasHaus;
+				uint16_t hasSchweine;
+				uint16_t hasChicken;
+				uint16_t hasCage;
+				uint16_t cows;
+				uint16_t pigs;
+				uint16_t sheep;
+				uint16_t chicken;
+				uint16_t birds;
+				uint16_t cowsFood;
+				uint16_t pigsFood;
+				uint16_t sheepFood;
+				uint16_t chickenFood;
+				uint16_t birdsFood;
+				bool cowsFed;
+				bool pigsFed;
+				bool sheepFed;
+				bool chickenFed;
+				bool birdsFed;
+				uint16_t cowsProduct;
+				uint16_t sheepProduct;
+				uint16_t pigsProduct;
+				uint16_t chickenProduct;
+		};
 		// persistent values
-		unsigned long money = 0;
-		char daytime = 0;	// 0=morgen,1=vormittag,2=mittag,3=nachmittag, 4=abend, 5=nacht
-		uint16_t day = 1;
-		uint16_t hasStall = 1;
-		uint16_t hasHaus = 0;
-		uint16_t hasSchweine = 0;
-		uint16_t hasChicken = 0;
-		uint16_t hasCage = 0;
-		uint16_t cows = 1;
-		uint16_t pigs = 0;
-		uint16_t sheep = 0;
-		uint16_t chicken = 0;
-		uint16_t birds = 0;
-		uint16_t cowsFood = 2;
-		uint16_t pigsFood = 0;
-		uint16_t sheepFood = 0;
-		uint16_t chickenFood = 0;
-		uint16_t birdsFood = 0;
-		bool cowsFed = false;
-		bool pigsFed = false;
-		bool sheepFed = false;
-		bool chickenFed = false;
-		bool birdsFed = false;
-		uint16_t cowsProduct = 0;
-		uint16_t sheepProduct = 0;
-		uint16_t pigsProduct = 0;
-		uint16_t chickenProduct = 0;
+		SaveGame g;
 
 		void showFarm();
 		void enter(char newGlobalState, char newState, int startPosX, int startPosY);
@@ -101,9 +105,14 @@ class FarmGame: public Game {
 		uint16_t getPriceTier(char product);
 		uint16_t getPriceFutter(char product);
 		char getHappiness();		// total happiness (-1 unhappy, 0 neutal, 1 happy)
+		void updateSaveGame();
 
 	public:
 		FarmGame();
 		void play() override;
+		bool needsPlayerSelection() override{
+			return true;
+		}
+		void selectPlayer(uint8_t player, bool resetSavedGame) override;
 };
 #endif

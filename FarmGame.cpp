@@ -27,7 +27,7 @@ void FarmGame::play(){
 	bool canTrade = true;
 	char text[10];
 
-	if (cows >= 200 && sheep >= 200 && pigs >= 200 && birds >= 200 && chicken >= 200 && getHappiness() == 1) {
+	if (g.cows >= 200 && g.sheep >= 200 && g.pigs >= 200 && g.birds >= 200 && g.chicken >= 200 && getHappiness() == 1) {
 		victory(1, 0, 11);
 		asm volatile ("jmp 0");
 	}
@@ -41,23 +41,23 @@ void FarmGame::play(){
 				break;
 			case GELD:
 				memset(text, 0, 10);
-				sprintf(text, " %-8ld", money);
+				sprintf(text, " %-8ld", g.money);
 				showScroller(text, ((millis() - statusStart) / 200) % 36, true);
 				break;
 			case FUTTERMENGE:
 				memset(text, 0, 10);
 				switch (state) {
 					case STALL:
-						sprintf(text, " : %d ; %d", cows, sheep);
+						sprintf(text, " : %d ; %d", g.cows, g.sheep);
 						break;
 					case CAGE:
-						sprintf(text, " > %d", birds);
+						sprintf(text, " > %d", g.birds);
 						break;
 					case CHICKEN:
-						sprintf(text, " = %d", chicken);
+						sprintf(text, " = %d", g.chicken);
 						break;
 					case SCHWEINE:
-						sprintf(text, " < %d", pigs);
+						sprintf(text, " < %d", g.pigs);
 						break;
 				}
 				showScroller(text, ((millis() - statusStart) / 200) % 36, true);
@@ -76,24 +76,24 @@ void FarmGame::play(){
 					if (werbungPointer == 7) {
 						enter(RUNNING, state, posX, posY);
 						tone(2500, 255, 0, -1);
-						switch (daytime) {
+						switch (g.daytime) {
 							case 0:
-								money += 500;
+								g.money += 500;
 								break;
 							case 1:
-								if (hasSchweine)
-									pigs += 20;
+								if (g.hasSchweine)
+									g.pigs += 20;
 								else
-									cows += 20;
+									g.cows += 20;
 								break;
 							case 2:
-								money += 3000;
+								g.money += 3000;
 								break;
 							case 3:
-								if (hasSchweine) pigs += 20;
+								if (g.hasSchweine) g.pigs += 20;
 								break;
 							case 4:
-								money += 700;
+								g.money += 700;
 								break;
 						}
 					}
@@ -102,15 +102,15 @@ void FarmGame::play(){
 			case KAUFEN:
 				if (state == FARM) {
 					copy(goods + (kaufState - STALL) * 20);
-					if (getPriceFarm(kaufState) > money) canTrade = false;
+					if (getPriceFarm(kaufState) > g.money) canTrade = false;
 				}
 				if (onMarktFutter()) {
 					copy(tierBild + kaufState * 20);
-					if (getPriceFutter(kaufState) > money) canTrade = false;
+					if (getPriceFutter(kaufState) > g.money) canTrade = false;
 				}
 				if (onMarktTiere()) {
 					copy(tierBild + kaufState * 20);
-					if (getPriceTier(kaufState) > money) canTrade = false;
+					if (getPriceTier(kaufState) > g.money) canTrade = false;
 				}
 				break;
 			case VERKAUFEN:
@@ -118,16 +118,16 @@ void FarmGame::play(){
 				Serial.println(kaufState);
 				switch (kaufState) {
 					case KUH:
-						if (cowsProduct == 0) canTrade = false;
+						if (g.cowsProduct == 0) canTrade = false;
 						break;
 					case SCHAF:
-						if (sheepProduct == 0) canTrade = false;
+						if (g.sheepProduct == 0) canTrade = false;
 						break;
 					case SCHWEIN:
-						if (pigsProduct == 0) canTrade = false;
+						if (g.pigsProduct == 0) canTrade = false;
 						break;
 					case HUHN:
-						if (chickenProduct == 0) canTrade = false;
+						if (g.chickenProduct == 0) canTrade = false;
 						break;
 				}
 				break;
@@ -136,38 +136,38 @@ void FarmGame::play(){
 					copy(tierBild + kaufState * 20);
 					switch (kaufState) {
 						case KUH:
-							if (cowsFood == 0) canTrade = false;
+							if (g.cowsFood == 0) canTrade = false;
 							break;
 						case SCHAF:
-							if (sheepFood == 0) canTrade = false;
+							if (g.sheepFood == 0) canTrade = false;
 							break;
 						case SCHWEIN:
-							if (pigsFood == 0) canTrade = false;
+							if (g.pigsFood == 0) canTrade = false;
 							break;
 						case HUHN:
-							if (chickenFood == 0) canTrade = false;
+							if (g.chickenFood == 0) canTrade = false;
 							break;
 						case VOGEL:
-							if (birdsFood == 0) canTrade = false;
+							if (g.birdsFood == 0) canTrade = false;
 							break;
 					}
 				} else {
 					memset(text, 0, 10);
 					switch (kaufState) {
 						case KUH:
-							sprintf(text, " : %d", cowsFood / cows);
+							sprintf(text, " : %d", g.cowsFood / g.cows);
 							break;
 						case SCHAF:
-							sprintf(text, " ; %d", sheepFood / sheep);
+							sprintf(text, " ; %d", g.sheepFood / g.sheep);
 							break;
 						case SCHWEIN:
-							sprintf(text, " < %d", pigsFood / pigs);
+							sprintf(text, " < %d", g.pigsFood / g.pigs);
 							break;
 						case HUHN:
-							sprintf(text, " = %d", chickenFood / chicken);
+							sprintf(text, " = %d", g.chickenFood / g.chicken);
 							break;
 						case VOGEL:
-							sprintf(text, " > %d", birdsFood / birds);
+							sprintf(text, " > %d", g.birdsFood / g.birds);
 							break;
 					}
 					showScroller(text, ((millis() - statusStart) / 200) % 28, true);
@@ -176,14 +176,7 @@ void FarmGame::play(){
 		}
 	}
 	if (globalState == KAUFEN || globalState == VERKAUFEN || globalState == FUETTERN) {
-		if (!canTrade) {
-			for (char y = 0; y < 5; y++)
-				for (char x = 0; x < 4; x++)
-					if (x == y)
-						set(x, y, 15);
-					else
-						getScreen()[y * 4 + x] = getScreen()[y * 4 + x] > 0 ? 2 : 0;
-		}
+		if (!canTrade) strike();
 		if (millis() - blinkKaufen < 300) for (char i = 0; i < 20; i++)
 			getScreen()[i] += 10 - (millis() - blinkKaufen) / 30;
 	}
@@ -201,24 +194,24 @@ void FarmGame::play(){
 					noise(random(1700) + 200, 170, 0, -4);
 					logPosition();
 				}
-				if ((state == FARM) && posX == 4 && posY == 7 && hasHaus) enter(globalState, HAUS, 5, 8);
+				if ((state == FARM) && posX == 4 && posY == 7 && g.hasHaus) enter(globalState, HAUS, 5, 8);
 				if ((state == FARM) && posX == 9 && posY == 8) {
 					if (tierImStall()) {
 						totalTiere = 0;
-						initTiere(cows, KUH, 1, 1, 6 + hasStall, 6 + hasStall);
-						initTiere(sheep, SCHAF, 1, 1, 6 + hasStall, 6 + hasStall);
+						initTiere(g.cows, KUH, 1, 1, 6 + g.hasStall, 6 + g.hasStall);
+						initTiere(g.sheep, SCHAF, 1, 1, 6 + g.hasStall, 6 + g.hasStall);
 					}
-					enter(globalState, STALL, 5, 7 + hasStall);
+					enter(globalState, STALL, 5, 7 + g.hasStall);
 				}
 				if ((state == FARM) && posX == -2 && posY == 6) {
 					totalTiere = 0;
-					initTiere(pigs, SCHWEIN, 1, 1, 6 + hasSchweine, 6 + hasSchweine);
-					enter(globalState, SCHWEINE, 5, 7 + hasSchweine);
+					initTiere(g.pigs, SCHWEIN, 1, 1, 6 + g.hasSchweine, 6 + g.hasSchweine);
+					enter(globalState, SCHWEINE, 5, 7 + g.hasSchweine);
 				}
 				if ((state == FARM) && posX == 9 && posY == 2) {
 					totalTiere = 0;
-					initTiere(chicken, HUHN, 1, 1, 6 + hasChicken, 6 + hasChicken);
-					enter(globalState, CHICKEN, 5, 7 + hasChicken);
+					initTiere(g.chicken, HUHN, 1, 1, 6 + g.hasChicken, 6 + g.hasChicken);
+					enter(globalState, CHICKEN, 5, 7 + g.hasChicken);
 				}
 				if ((state == FARM || state == WEIDE || state == MARKT) && posX == 4 && posY == 40) {	// easter egg portal
 					posX = 1;
@@ -226,7 +219,7 @@ void FarmGame::play(){
 				}
 				if (state == HAUS && posX >= 7 && posY == 1) {
 					totalTiere = 0;
-					initTiere(birds, VOGEL, 3 - hasCage, 3, 1 + hasCage, 1 + hasCage);
+					initTiere(g.birds, VOGEL, 3 - g.hasCage, 3, 1 + g.hasCage, 1 + g.hasCage);
 					enter(globalState, HAUS_OG, posX, posY);
 				}
 				if (state == MARKT && posY == 13) enter(globalState, FARM, posX, posY);
@@ -280,8 +273,8 @@ void FarmGame::play(){
 					if (state == FARM && posX == 14) {
 						if (!tierImStall()) {
 							totalTiere = 0;
-							initTiere(cows, KUH, 15, 3, 6 + hasStall, 6 + hasStall);
-							initTiere(sheep, SCHAF, 15, 3, 6 + hasStall, 6 + hasStall);
+							initTiere(g.cows, KUH, 15, 3, 6 + g.hasStall, 6 + g.hasStall);
+							initTiere(g.sheep, SCHAF, 15, 3, 6 + g.hasStall, 6 + g.hasStall);
 						}
 						enter(globalState, WEIDE, posX, posY);
 					}
@@ -301,9 +294,9 @@ void FarmGame::play(){
 					noise(random(1700) + 200, 170, 0, -4);
 				}
 				if (state == HAUS && posX == 5 && posY == 9) enter(globalState, FARM, 4, 8);
-				if (state == STALL && posX == 5 && posY == 8 + hasStall) enter(globalState, FARM, 9, 9);
-				if (state == SCHWEINE && posX == 5 && posY == 8 + hasStall) enter(globalState, FARM, -2, 7);
-				if (state == CHICKEN && posX == 5 && posY == 8 + hasChicken) enter(globalState, FARM, 9, 3);
+				if (state == STALL && posX == 5 && posY == 8 + g.hasStall) enter(globalState, FARM, 9, 9);
+				if (state == SCHWEINE && posX == 5 && posY == 8 + g.hasStall) enter(globalState, FARM, -2, 7);
+				if (state == CHICKEN && posX == 5 && posY == 8 + g.hasChicken) enter(globalState, FARM, 9, 3);
 				if (state == HAUS_OG && posX >= 7 && posY == 4) enter(globalState, HAUS, posX, posY);
 				if (state == FARM && posY >= 13 && posX >= 2 && posX <= 6) enter(globalState, MARKT, posX, posY);
 				if (state == MARKT && posY < 13) enter(globalState, FARM, posX, posY);
@@ -330,7 +323,7 @@ void FarmGame::play(){
 						enter(KAUFEN, state, posX, posY);
 						kaufState = STALL;
 					}
-					if ((onMarktFutter() || onMarktTiere()) && (daytime == 1 || daytime == 3)) {
+					if ((onMarktFutter() || onMarktTiere()) && (g.daytime == 1 || g.daytime == 3)) {
 						enter(KAUFEN, state, posX, posY);
 						kaufState = KUH;
 					}
@@ -344,62 +337,65 @@ void FarmGame::play(){
 					if (state == FARM) {
 						switch (kaufState) {
 							case STALL:
-								productKaufen(&hasStall, getPriceFarm(kaufState), 1);
+								productKaufen(&g.hasStall, getPriceFarm(kaufState), 1);
 								break;
 							case HAUS:
-								productKaufen(&hasHaus, getPriceFarm(kaufState), 1);
+								productKaufen(&g.hasHaus, getPriceFarm(kaufState), 1);
 								break;
 							case CAGE:
-								if (hasHaus) productKaufen(&hasCage, getPriceFarm(kaufState), 1);
+								if (g.hasHaus) productKaufen(&g.hasCage, getPriceFarm(kaufState), 1);
 								break;
 							case CHICKEN:
-								productKaufen(&hasChicken, getPriceFarm(kaufState), 1);
+								productKaufen(&g.hasChicken, getPriceFarm(kaufState), 1);
 								break;
 							case SCHWEINE:
-								productKaufen(&hasSchweine, getPriceFarm(kaufState), 1);
+								productKaufen(&g.hasSchweine, getPriceFarm(kaufState), 1);
 								break;
 						}
+						updateSaveGame();
 					}
 					if (onMarktTiere()) {
 						bool bought = false;
 						switch (kaufState) {
 							case KUH:
-								if (hasStall) bought = productKaufen(&cows, getPriceTier(kaufState), 1);
+								if (g.hasStall) bought = productKaufen(&g.cows, getPriceTier(kaufState), 1);
 								break;
 							case SCHAF:
-								if (hasStall) bought = productKaufen(&sheep, getPriceTier(kaufState), 1);
+								if (g.hasStall) bought = productKaufen(&g.sheep, getPriceTier(kaufState), 1);
 								break;
 							case SCHWEIN:
-								if (hasSchweine) bought = productKaufen(&pigs, getPriceTier(kaufState), 1);
+								if (g.hasSchweine) bought = productKaufen(&g.pigs, getPriceTier(kaufState), 1);
 								break;
 							case HUHN:
-								if (hasChicken) bought = productKaufen(&chicken, getPriceTier(kaufState), 1);
+								if (g.hasChicken) bought = productKaufen(&g.chicken, getPriceTier(kaufState), 1);
 								break;
 							case VOGEL:
-								if (hasCage) bought = productKaufen(&birds, getPriceTier(kaufState), 1);
+								if (g.hasCage) bought = productKaufen(&g.birds, getPriceTier(kaufState), 1);
 								break;
 						}
+						updateSaveGame();
 						if (bought) tierSound(kaufState, true);
 					}
 					if (onMarktFutter()) {
 						bool bought = false;
 						switch (kaufState) {
 							case KUH:
-								if (cows) bought = productKaufen(&cowsFood, getPriceFutter(kaufState), cows);
+								if (g.cows) bought = productKaufen(&g.cowsFood, getPriceFutter(kaufState), g.cows);
 								break;
 							case SCHAF:
-								if (sheep) bought = productKaufen(&sheepFood, getPriceFutter(kaufState), sheep);
+								if (g.sheep) bought = productKaufen(&g.sheepFood, getPriceFutter(kaufState), g.sheep);
 								break;
 							case SCHWEIN:
-								if (pigs) bought = productKaufen(&pigsFood, getPriceFutter(kaufState), pigs);
+								if (g.pigs) bought = productKaufen(&g.pigsFood, getPriceFutter(kaufState), g.pigs);
 								break;
 							case HUHN:
-								if (chicken) bought = productKaufen(&chickenFood, getPriceFutter(kaufState), chicken);
+								if (g.chicken) bought = productKaufen(&g.chickenFood, getPriceFutter(kaufState), g.chicken);
 								break;
 							case VOGEL:
-								if (birds) bought = productKaufen(&birdsFood, getPriceFutter(kaufState), birds);
+								if (g.birds) bought = productKaufen(&g.birdsFood, getPriceFutter(kaufState), g.birds);
 								break;
 						}
+						updateSaveGame();
 						if (bought) tierSound(kaufState, true);
 					}
 					break;
@@ -407,67 +403,70 @@ void FarmGame::play(){
 					if (onMarktFutter()) {
 						switch (kaufState) {
 							case KUH:
-								productVerkaufen(&cowsProduct, 25);
+								productVerkaufen(&g.cowsProduct, 25);
 								break;
 							case SCHAF:
-								productVerkaufen(&sheepProduct, 25);
+								productVerkaufen(&g.sheepProduct, 25);
 								break;
 							case SCHWEIN:
-								productVerkaufen(&pigsProduct, 50);
+								productVerkaufen(&g.pigsProduct, 50);
 								break;
 							case HUHN:
-								productVerkaufen(&chickenProduct, 7);
+								productVerkaufen(&g.chickenProduct, 7);
 								break;
 						}
 					}
+					updateSaveGame();
 					break;
 				case FUETTERN:
 					if (canTrade) {
 						switch (kaufState) {
 							case KUH:
-								if (!cowsFed) cowsFood -= cows;
-								cowsFed = true;
+								if (!g.cowsFed) g.cowsFood -= g.cows;
+								g.cowsFed = true;
 								break;
 							case SCHAF:
-								if (!sheepFed) sheepFood -= sheep;
-								sheepFed = true;
+								if (!g.sheepFed) g.sheepFood -= g.sheep;
+								g.sheepFed = true;
 								break;
 							case SCHWEIN:
-								if (!pigsFed) pigsFood -= pigs;
-								pigsFed = true;
+								if (!g.pigsFed) g.pigsFood -= g.pigs;
+								g.pigsFed = true;
 								break;
 							case HUHN:
-								if (!chickenFed) chickenFood -= chicken;
-								chickenFed = true;
+								if (!g.chickenFed) g.chickenFood -= g.chicken;
+								g.chickenFed = true;
 								break;
 							case VOGEL:
-								if (!birdsFed) birdsFood -= birds;
-								birdsFed = true;
+								if (!g.birdsFed) g.birdsFood -= g.birds;
+								g.birdsFed = true;
 								break;
 						}
+						updateSaveGame();
 						tierSound(WEIDE, true);
 					}
 					break;
 			}
 			break;
 		case 9:
-			if (daytime == 0 || daytime == 2 || daytime == 4) {
-				if (state == STALL && (cows > 0 && cowsFood >= cows && !cowsFed) || (sheep > 0 && sheepFood >= sheep && !sheepFed)) {
+			if (g.daytime == 0 || g.daytime == 2 || g.daytime == 4) {
+				if (state == STALL && (g.cows > 0 && g.cowsFood >= g.cows && !g.cowsFed)
+						|| (g.sheep > 0 && g.sheepFood >= g.sheep && !g.sheepFed)) {
 					enter(FUETTERN, state, posX, posY);
 					kaufState = KUH;
 					statusStart = millis();
 				}
-				if (state == SCHWEINE && pigs > 0 && pigsFood >= pigs && !pigsFed) {
+				if (state == SCHWEINE && g.pigs > 0 && g.pigsFood >= g.pigs && !g.pigsFed) {
 					enter(FUETTERN, state, posX, posY);
 					kaufState = SCHWEIN;
 					statusStart = millis();
 				}
-				if (state == CHICKEN && chicken > 0 && chickenFood >= chicken && !chickenFed) {
+				if (state == CHICKEN && g.chicken > 0 && g.chickenFood >= g.chicken && !g.chickenFed) {
 					enter(FUETTERN, state, posX, posY);
 					kaufState = HUHN;
 					statusStart = millis();
 				}
-				if (state == HAUS_OG && birds > 0 && birdsFood >= birds && !birdsFed) {
+				if (state == HAUS_OG && g.birds > 0 && g.birdsFood >= g.birds && !g.birdsFed) {
 					enter(FUETTERN, state, posX, posY);
 					kaufState = VOGEL;
 					statusStart = millis();
@@ -475,25 +474,27 @@ void FarmGame::play(){
 			}
 			break;
 		case 11:
-			if (state == MARKT && onMarktFutter() && (daytime == 1 || daytime == 3)) {
+			if (state == MARKT && onMarktFutter() && (g.daytime == 1 || g.daytime == 3)) {
 				enter(VERKAUFEN, state, posX, posY);
 				kaufState = KUH;
 			}
 			break;
 		case 0:
-			if ((daytime == 1 || daytime == 3) && cowsFed && state == STALL) cowsProduct += cows;
-			if (daytime == 2 && sheepFed && state == STALL) sheepProduct += sheep;
-			if (daytime == 1 && pigsFed && state == SCHWEINE) {
-				pigsProduct++;
-				pigs--;
+			if ((g.daytime == 1 || g.daytime == 3) && g.cowsFed && state == STALL) g.cowsProduct += g.cows;
+			if (g.daytime == 2 && g.sheepFed && state == STALL) g.sheepProduct += g.sheep;
+			if (g.daytime == 1 && g.pigsFed && state == SCHWEINE) {
+				g.pigsProduct++;
+				g.pigs--;
 			}
-			if (daytime == 4 && chickenFed && state == CHICKEN) chickenProduct += chicken;
+			if (g.daytime == 4 && g.chickenFed && state == CHICKEN) g.chickenProduct += g.chicken;
+			updateSaveGame();
 			break;
 		case 10:
 			increaseDayTime();
 			clear(0);
 			drawDaytime();
 			stopTimeDisplay = millis() + 800;
+			updateSaveGame();
 			break;
 		case 2:
 			if (globalState != FUTTERMENGE && (state == STALL || state == HAUS_OG || state == SCHWEINE || state == CHICKEN)) {
@@ -513,12 +514,12 @@ void FarmGame::showFarm(){
 		case WEIDE:
 		case MARKT:
 			// rahmen
-			drawRectangle(rx(hasSchweine ? -5 : 0), ry(hasChicken ? -4 : 0), hasSchweine ? 19 : 14, hasChicken ? 17 : 13, 15);
+			drawRectangle(rx(g.hasSchweine ? -5 : 0), ry(g.hasChicken ? -4 : 0), g.hasSchweine ? 19 : 14, g.hasChicken ? 17 : 13, 15);
 			// durchgaenge
 			set(rx(4), ry(12), 0);
 			set(rx(13), ry(7), 0);
 			// haus
-			if (hasHaus) {
+			if (g.hasHaus) {
 				drawBox(rx(2), ry(3), 5, 5, 10);
 				drawLine(rx(3), ry(2), 1, 0, 3, 10);
 				set(rx(4), ry(1), 10);
@@ -537,15 +538,15 @@ void FarmGame::showFarm(){
 			// weide
 			drawLine(rx(13), ry(6), 1, 0, 3, 15);
 			drawLine(rx(13), ry(8), 1, 0, 3, 15);
-			drawRectangle(rx(15), ry(2), 9 + hasStall, 9 + hasStall, 15);
+			drawRectangle(rx(15), ry(2), 9 + g.hasStall, 9 + g.hasStall, 15);
 			set(rx(15), ry(7), 1);
 			// schweine
-			if (hasSchweine) {
+			if (g.hasSchweine) {
 				drawRectangle(rx(-3), ry(2), 3, 5, 15);
 				set(rx(-2), ry(6), 2);		// eingang
 			}
 			// chicken
-			if (hasChicken) {
+			if (g.hasChicken) {
 				drawRectangle(rx(8), ry(-2), 4, 5, 15);
 				drawBox(rx(9), ry(-1), 2, 3, 1);
 				set(rx(9), ry(2), 2);		// eingang
@@ -594,22 +595,22 @@ void FarmGame::showFarm(){
 			}
 			break;
 		case STALL:
-			drawRectangle(rx(0), ry(0), 9 + hasStall, 9 + hasStall, 15);
+			drawRectangle(rx(0), ry(0), 9 + g.hasStall, 9 + g.hasStall, 15);
 			set(2, 2, (millis() / 100) % 3 + 1);		//player
 			if (tierImStall()) drawTiere();
-			set(rx(5), ry(8 + hasStall), 2);
+			set(rx(5), ry(8 + g.hasStall), 2);
 			break;
 		case SCHWEINE:
-			drawRectangle(rx(0), ry(0), 9 + hasSchweine, 9 + hasSchweine, 15);
+			drawRectangle(rx(0), ry(0), 9 + g.hasSchweine, 9 + g.hasSchweine, 15);
 			set(2, 2, (millis() / 100) % 3 + 1);		//player
 			drawTiere();
-			set(rx(5), ry(8 + hasSchweine), 2);
+			set(rx(5), ry(8 + g.hasSchweine), 2);
 			break;
 		case CHICKEN:
-			drawRectangle(rx(0), ry(0), 9 + hasChicken, 9 + hasChicken, 15);
+			drawRectangle(rx(0), ry(0), 9 + g.hasChicken, 9 + g.hasChicken, 15);
 			set(2, 2, (millis() / 100) % 3 + 1);		//player
 			drawTiere();
-			set(rx(5), ry(8 + hasChicken), 2);
+			set(rx(5), ry(8 + g.hasChicken), 2);
 			break;
 		case HAUS:
 			drawRectangle(rx(0), ry(0), 10, 10, 15);
@@ -625,17 +626,17 @@ void FarmGame::showFarm(){
 			set(rx(5), ry(9), 2);
 			break;
 		case HAUS_OG:
-			drawRectangle(rx(0 - hasCage), ry(0), 10 + hasCage, 10 + hasCage, 15);
+			drawRectangle(rx(0 - g.hasCage), ry(0), 10 + g.hasCage, 10 + g.hasCage, 15);
 			// treppe
 			drawDottedLine(rx(7), ry(1), 0, 1, 4, 2, 1);
 			drawDottedLine(rx(8), ry(1), 0, 1, 4, 2, 1);
 			drawLine(rx(6), ry(2), 0, 1, 4, 7);
 			drawLine(rx(6), ry(5), 1, 0, 3, 7);
 			// vogelkaefig
-			if (hasCage) {
-				drawRectangle(rx(2 - hasCage), ry(2), 3 + hasCage, 3 + hasCage, 2);
-				set(rx(2 - hasCage), ry(5 + hasCage), 2);
-				set(rx(4), ry(5 + hasCage), 2);
+			if (g.hasCage) {
+				drawRectangle(rx(2 - g.hasCage), ry(2), 3 + g.hasCage, 3 + g.hasCage, 2);
+				set(rx(2 - g.hasCage), ry(5 + g.hasCage), 2);
+				set(rx(4), ry(5 + g.hasCage), 2);
 				drawTiere();
 			}
 			break;
@@ -786,29 +787,29 @@ void FarmGame::tierSound(char tierType, bool force){
 }
 
 void FarmGame::increaseDayTime(){
-	daytime++;
-	if (daytime == 6) daytime = 0;
-	if (daytime == 0 || daytime == 2 || daytime == 4) {
-		cowsFed = false;
-		sheepFed = false;
-		pigsFed = false;
-		chickenFed = false;
-		birdsFed = false;
+	g.daytime++;
+	if (g.daytime == 6) g.daytime = 0;
+	if (g.daytime == 0 || g.daytime == 2 || g.daytime == 4) {
+		g.cowsFed = false;
+		g.sheepFed = false;
+		g.pigsFed = false;
+		g.chickenFed = false;
+		g.birdsFed = false;
 	}
 }
 
 void FarmGame::productVerkaufen(uint16_t *product, uint16_t price){
 	if (*product > 0) {
-		money += *product * price;
+		g.money += *product * price;
 		*product = 0;
 		blinkKaufen = millis();
 	}
 }
 
 bool FarmGame::productKaufen(uint16_t *product, uint16_t price, uint16_t amount){
-	if (money >= price * amount) {
+	if (g.money >= price * amount) {
 		*product += amount;
-		money -= price * amount;
+		g.money -= price * amount;
 		blinkKaufen = millis();
 		return true;
 	} else
@@ -830,7 +831,7 @@ bool FarmGame::onMarktFutter(){
 }
 
 void FarmGame::drawDaytime(){
-	switch (daytime) {
+	switch (g.daytime) {
 		case 0:
 			drawFade(0, 1, 2, 1, 1);
 			set(0, 2, 15);
@@ -859,7 +860,7 @@ void FarmGame::drawDaytime(){
 }
 
 bool FarmGame::tierImStall(){
-	if (daytime > 0 && daytime < 4)
+	if (g.daytime > 0 && g.daytime < 4)
 		return false;
 	else
 		return true;
@@ -901,10 +902,49 @@ uint16_t FarmGame::getPriceFutter(char product){
 
 char FarmGame::getHappiness(){
 	char happiness = 0;
-	happiness += cowsFed ? 1 : -1;
-	happiness += pigsFed ? 1 : -1;
-	happiness += sheepFed ? 1 : -1;
-	happiness += chickenFed ? 1 : -1;
-	happiness += birdsFed ? 1 : -1;
+	happiness += g.cowsFed ? 1 : -1;
+	happiness += g.pigsFed ? 1 : -1;
+	happiness += g.sheepFed ? 1 : -1;
+	happiness += g.chickenFed ? 1 : -1;
+	happiness += g.birdsFed ? 1 : -1;
 	return happiness < -1 ? -1 : happiness > 1 ? 1 : 0;
+}
+
+void FarmGame::updateSaveGame(){
+	saveGame((uint8_t*) &g, sizeof(SaveGame), 0, currentPlayer);
+}
+
+void FarmGame::selectPlayer(uint8_t player, bool resetSavedGame){
+	if (!resetSavedGame)
+		loadGame((uint8_t*) &g, sizeof(SaveGame), 0, player);
+	else {
+		g.money = 0;
+		g.daytime = 0;
+		g.day = 1;
+		g.hasStall = 1;
+		g.hasHaus = 0;
+		g.hasSchweine = 0;
+		g.hasChicken = 0;
+		g.hasCage = 0;
+		g.cows = 1;
+		g.pigs = 0;
+		g.sheep = 0;
+		g.chicken = 0;
+		g.birds = 0;
+		g.cowsFood = 2;
+		g.pigsFood = 0;
+		g.sheepFood = 0;
+		g.chickenFood = 0;
+		g.birdsFood = 0;
+		g.cowsFed = false;
+		g.pigsFed = false;
+		g.sheepFed = false;
+		g.chickenFed = false;
+		g.birdsFed = false;
+		g.cowsProduct = 0;
+		g.sheepProduct = 0;
+		g.pigsProduct = 0;
+		g.chickenProduct = 0;
+	}
+	currentPlayer = player;
 }

@@ -154,6 +154,15 @@ char get(int x, int y){
 		return -1;
 }
 
+void strike(){
+	for (char y = 0; y < 5; y++)
+		for (char x = 0; x < 4; x++)
+			if (x == y)
+				set(x, y, 15);
+			else
+				screen[y * 4 + x] = screen[y * 4 + x] > 0 ? 2 : 0;
+}
+
 char* getPalette(){
 	return palette;
 }
