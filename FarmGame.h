@@ -49,10 +49,9 @@ class FarmGame: public Game {
 		int16_t tierMinX = 0, tierMaxX = 0, tierMinY = 0, tierMaxY = 0;
 
 		// persistent values
-		unsigned long money = 20000;
+		unsigned long money = 0;
 		char daytime = 0;	// 0=morgen,1=vormittag,2=mittag,3=nachmittag, 4=abend, 5=nacht
 		uint16_t day = 1;
-		char happiness = 0;
 		uint16_t hasStall = 1;
 		uint16_t hasHaus = 0;
 		uint16_t hasSchweine = 0;
@@ -63,12 +62,12 @@ class FarmGame: public Game {
 		uint16_t sheep = 0;
 		uint16_t chicken = 0;
 		uint16_t birds = 0;
-		uint16_t cowsFood = 0;
+		uint16_t cowsFood = 2;
 		uint16_t pigsFood = 0;
 		uint16_t sheepFood = 0;
 		uint16_t chickenFood = 0;
 		uint16_t birdsFood = 0;
-		bool cowsFed = true;
+		bool cowsFed = false;
 		bool pigsFed = false;
 		bool sheepFed = false;
 		bool chickenFed = false;
@@ -101,6 +100,7 @@ class FarmGame: public Game {
 		uint16_t getPriceFarm(char product);
 		uint16_t getPriceTier(char product);
 		uint16_t getPriceFutter(char product);
+		char getHappiness();		// total happiness (-1 unhappy, 0 neutal, 1 happy)
 
 	public:
 		FarmGame();

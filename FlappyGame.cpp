@@ -72,7 +72,7 @@ void FlappyGame::move(){
 			break;
 	}
 
-	if (progress == 155) {
+	if (progress == 125) {
 		victory(level, 9, 11);
 		level++;
 		initLevel();
@@ -91,7 +91,7 @@ void FlappyGame::drawTunnel(){
 //	drawRand(3 - progress % 4, 0, true, 1);
 	set(3 - progress % 4, (progress / 4 - pos) % 5, 1);
 	for (char x = 0; x < 4; x++) {
-		if (tunnelDown[x] - tunnelUp[x] == 5) drawRand(x, 0, true, 1);	// finish line
+		if (tunnelDown[x] - tunnelUp[x] == 6) drawRand(x, 0, true, 1);	// finish line
 		drawRand(x, tunnelUp[x] + 2 - pos, false, 5);
 		drawRand(x, tunnelDown[x] + 2 - pos, true, 5);
 	}

@@ -27,6 +27,11 @@ void FarmGame::play(){
 	bool canTrade = true;
 	char text[10];
 
+	if (cows >= 200 && sheep >= 200 && pigs >= 200 && birds >= 200 && chicken >= 200 && getHappiness() == 1) {
+		victory(1, 0, 11);
+		asm volatile ("jmp 0");
+	}
+
 	if (millis() > stopTimeDisplay) {
 		clear(0);
 
@@ -61,7 +66,7 @@ void FarmGame::play(){
 				if (((millis() - statusStart) / 2000) % 2)
 					drawDaytime();
 				else
-					copy(faces + 20 + happiness * 20);
+					copy(faces + 20 + getHappiness() * 20);
 				break;
 			case WERBUNG:
 				copy(werbung + werbungPointer * 20);
@@ -150,19 +155,19 @@ void FarmGame::play(){
 					memset(text, 0, 10);
 					switch (kaufState) {
 						case KUH:
-							sprintf(text, " : %d", cowsFood);
+							sprintf(text, " : %d", cowsFood / cows);
 							break;
 						case SCHAF:
-							sprintf(text, " ; %d",  sheepFood);
+							sprintf(text, " ; %d", sheepFood / sheep);
 							break;
 						case SCHWEIN:
-							sprintf(text, " < %d", pigsFood);
+							sprintf(text, " < %d", pigsFood / pigs);
 							break;
 						case HUHN:
-							sprintf(text, " = %d", chickenFood);
+							sprintf(text, " = %d", chickenFood / chicken);
 							break;
 						case VOGEL:
-							sprintf(text, " > %d", birdsFood);
+							sprintf(text, " > %d", birdsFood / birds);
 							break;
 					}
 					showScroller(text, ((millis() - statusStart) / 200) % 28, true);
@@ -362,7 +367,7 @@ void FarmGame::play(){
 								if (hasStall) bought = productKaufen(&cows, getPriceTier(kaufState), 1);
 								break;
 							case SCHAF:
-								if (hasStall) bought = productKaufen(&pigs, getPriceTier(kaufState), 1);
+								if (hasStall) bought = productKaufen(&sheep, getPriceTier(kaufState), 1);
 								break;
 							case SCHWEIN:
 								if (hasSchweine) bought = productKaufen(&pigs, getPriceTier(kaufState), 1);
@@ -420,23 +425,23 @@ void FarmGame::play(){
 					if (canTrade) {
 						switch (kaufState) {
 							case KUH:
-								cowsFood -= cows;
+								if (!cowsFed) cowsFood -= cows;
 								cowsFed = true;
 								break;
 							case SCHAF:
-								sheepFood -= sheep;
+								if (!sheepFed) sheepFood -= sheep;
 								sheepFed = true;
 								break;
 							case SCHWEIN:
-								pigsFood -= pigs;
+								if (!pigsFed) pigsFood -= pigs;
 								pigsFed = true;
 								break;
 							case HUHN:
-								chickenFood -= chicken;
+								if (!chickenFed) chickenFood -= chicken;
 								chickenFed = true;
 								break;
 							case VOGEL:
-								birdsFood -= birds;
+								if (!birdsFed) birdsFood -= birds;
 								birdsFed = true;
 								break;
 						}
@@ -452,7 +457,7 @@ void FarmGame::play(){
 					kaufState = KUH;
 					statusStart = millis();
 				}
-				if (state == SCHWEINE && cows > 0 && pigsFood >= pigs && !pigsFed) {
+				if (state == SCHWEINE && pigs > 0 && pigsFood >= pigs && !pigsFed) {
 					enter(FUETTERN, state, posX, posY);
 					kaufState = SCHWEIN;
 					statusStart = millis();
@@ -892,4 +897,14 @@ uint16_t FarmGame::getPriceTier(char product){
 
 uint16_t FarmGame::getPriceFutter(char product){
 	return 1;
+}
+
+char FarmGame::getHappiness(){
+	char happiness = 0;
+	happiness += cowsFed ? 1 : -1;
+	happiness += pigsFed ? 1 : -1;
+	happiness += sheepFed ? 1 : -1;
+	happiness += chickenFed ? 1 : -1;
+	happiness += birdsFed ? 1 : -1;
+	return happiness < -1 ? -1 : happiness > 1 ? 1 : 0;
 }
