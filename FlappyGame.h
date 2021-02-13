@@ -7,14 +7,18 @@ class FlappyGame: public Game {
 	private:
 		int width = 10;
 		int pos = 0;
-		int tunnel[4];
-		uint16_t level=0;
-		uint16_t brake=500;
-		unsigned long nextStep=0;
+		int16_t tunnelUp[4];
+		int16_t tunnelDown[4];
+		uint16_t level = 1;
+		uint16_t brake = 500;
+		uint16_t progress = 0;
+		unsigned long nextStep = 0;
 
 		void initLevel();
 		void advanceTunnel();
-//		void drawRand
+		void drawRand(char x, int y, bool down, char color);
+		void move();
+		void drawTunnel();
 
 	public:
 		FlappyGame();
