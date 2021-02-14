@@ -19,6 +19,7 @@ void WallGame::play(){
 
 void WallGame::initLevel(){
 	pos = 1;
+	initWall();
 	progress = 0;
 	brake = 400 - level * 40;
 	if (brake < 10) brake = 10;
@@ -28,11 +29,13 @@ void WallGame::advanceWall(){
 	if (jumping > 0) jumping--;
 	noise(random(1700) + 200, 170, 0, -4);
 	wallPos++;
-	if (wallPos == 5) {
-		wallPos = 0;
-		loch = random(5) - 1;
-	}
+	if (wallPos == 5) initWall();
 	progress++;
+}
+
+void WallGame::initWall(){
+	wallPos = 0;
+	loch = random(5) - 1;
 }
 
 void WallGame::move(){

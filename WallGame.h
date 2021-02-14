@@ -18,6 +18,7 @@ class WallGame: public Game {
 		void advanceWall();
 		void move();
 		void draw();
+		void initWall();
 
 	public:
 		WallGame();
