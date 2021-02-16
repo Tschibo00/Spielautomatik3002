@@ -90,11 +90,13 @@ void play(){
 			clear(0);
 			select = getNumberClick();
 			if (select == 3) {
+				resetPlayer = false;
 				selectedPlayer--;
 				if (selectedPlayer < 0) selectedPlayer = 2;
 				Serial.println(selectedPlayer);
 			}
 			if (select == 5) {
+				resetPlayer = false;
 				selectedPlayer++;
 				if (selectedPlayer > 2) selectedPlayer = 0;
 				Serial.println(selectedPlayer);

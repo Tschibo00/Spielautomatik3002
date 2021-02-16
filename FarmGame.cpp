@@ -788,7 +788,10 @@ void FarmGame::tierSound(char tierType, bool force){
 
 void FarmGame::increaseDayTime(){
 	g.daytime++;
-	if (g.daytime == 6) g.daytime = 0;
+	if (g.daytime == 6) {
+		g.daytime = 0;
+		g.day++;
+	}
 	if (g.daytime == 0 || g.daytime == 2 || g.daytime == 4) {
 		g.cowsFed = false;
 		g.sheepFed = false;
@@ -947,4 +950,69 @@ void FarmGame::selectPlayer(uint8_t player, bool resetSavedGame){
 		g.chickenProduct = 0;
 	}
 	currentPlayer = player;
+
+	/*
+
+	 Serial.println(currentPlayer);
+	 Serial.println(resetSavedGame);
+	 Serial.println(g.money);
+	 Serial.println(g.day);
+	 Serial.println(g.daytime);
+	 Serial.println(g.hasStall);
+	 Serial.println(g.hasHaus);
+	 Serial.println(g.hasSchweine);
+	 Serial.println(g.hasChicken);
+	 Serial.println(g.hasCage);
+	 Serial.println(g.cows);
+	 Serial.println(g.pigs);
+	 Serial.println(g.sheep);
+	 Serial.println(g.chicken);
+	 Serial.println(g.birds);
+	 Serial.println(g.cowsFood);
+	 Serial.println(g.pigsFood);
+	 Serial.println(g.sheepFood);
+	 Serial.println(g.chickenFood);
+	 Serial.println(g.birdsFood);
+	 Serial.println(g.cowsFed);
+	 Serial.println(g.pigsFed);
+	 Serial.println(g.sheepFed);
+	 Serial.println(g.chickenFed);
+	 Serial.println(g.birdsFed);
+	 Serial.println(g.cowsProduct);
+	 Serial.println(g.sheepProduct);
+	 Serial.println(g.pigsProduct);
+	 Serial.println(g.chickenProduct);
+	 */
 }
+/*
+ * Peters Stand
+ 0		player
+ 0
+ 4311	geld
+ 1		tag
+ 
+ 1		gebaeude
+ 1
+ 4
+ 8
+ 12
+ 7		tiere
+ 20
+ 2
+ 35
+ 26
+ 37		futter
+ 14
+ 0
+ 25
+ 65526
+ 1		gefuettert
+ 0
+ 1
+ 0
+ 1
+ 0		produkte
+ 0
+ 0
+ 0
+ */
