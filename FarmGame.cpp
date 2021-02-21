@@ -295,7 +295,7 @@ void FarmGame::play(){
 				}
 				if (state == HAUS && posX == 5 && posY == 9) enter(globalState, FARM, 4, 8);
 				if (state == STALL && posX == 5 && posY == 8 + g.hasStall) enter(globalState, FARM, 9, 9);
-				if (state == SCHWEINE && posX == 5 && posY == 8 + g.hasStall) enter(globalState, FARM, -2, 7);
+				if (state == SCHWEINE && posX == 5 && posY == 8 + g.hasSchweine) enter(globalState, FARM, -2, 7);
 				if (state == CHICKEN && posX == 5 && posY == 8 + g.hasChicken) enter(globalState, FARM, 9, 3);
 				if (state == HAUS_OG && posX >= 7 && posY == 4) enter(globalState, HAUS, posX, posY);
 				if (state == FARM && posY >= 13 && posX >= 2 && posX <= 6) enter(globalState, MARKT, posX, posY);

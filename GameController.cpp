@@ -12,7 +12,8 @@
 #include "WuerfelGame.h"
 #include "FlappyGame.h"
 #include "WallGame.h"
-#define GAME_COUNT 7
+#include "TVGame.h"
+#define GAME_COUNT 8
 
 Game *runningGame = NULL;
 char state = GAME_STARTUP;
@@ -20,12 +21,13 @@ int currentGame = -1;
 char selectedPlayer = 0;
 bool resetPlayer = false;
 
-static const uint8_t icons[7][20] = { { 0, 15, 15, 0, 15, 0, 0, 15, 15, 0, 0, 15, 15, 0, 0, 15, 0, 15, 15, 0 },		// wuerfel
+static const uint8_t icons[8][20] = { { 0, 15, 15, 0, 15, 0, 0, 15, 15, 0, 0, 15, 15, 0, 0, 15, 0, 15, 15, 0 },		// wuerfel
 		{ 7, 15, 3, 7, 0, 0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 15, 0 },				// asteroid
 		{ 15, 15, 15, 15, 0, 0, 0, 15, 15, 15, 3, 15, 15, 0, 0, 15, 15, 0, 15, 15 },	// labyrinth
 		{ 15, 15, 15, 15, 15, 0, 0, 15, 15, 0, 0, 15, 15, 0, 0, 15, 15, 0, 15, 15 },	// farm
 		{ 0, 2, 0, 0, 0, 0, 5, 0, 1, 3, 7, 15, 0, 0, 5, 0, 0, 2, 0, 0 }, 					// flappy
 		{ 0, 0, 0, 0, 8, 8, 8, 8, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0 },					// wall
+		{ 15, 15, 15, 15, 15, 1, 3, 15, 15, 3, 1, 15, 15, 15, 15, 15, 8, 0, 0, 8 },	// TV
 		{ 0, 0, 0, 15, 7, 1, 15, 15, 15, 15, 15, 15, 7, 1, 15, 15, 0, 0, 0, 15 }		// tonetest
 };
 
@@ -59,6 +61,9 @@ void initGame(int game){
 			runningGame = new WallGame();
 			break;
 		case 6:
+			runningGame = new TVGame();
+			break;
+		case 7:
 			runningGame = new ToneTest();
 			break;
 	}
