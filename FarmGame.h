@@ -29,7 +29,7 @@
 #define HUHN 3
 #define VOGEL 4
 
-#define MAX_TIER 100		// shouldn't be more than 100 to avoid memory problems
+#define MAX_TIER 90		// shouldn't be more than 100 to avoid memory problems
 
 class FarmGame: public Game {
 	private:
@@ -58,7 +58,8 @@ class FarmGame: public Game {
 				char daytime;	// 0=morgen,1=vormittag,2=mittag,3=nachmittag, 4=abend, 5=nacht
 				uint16_t day;
 				uint16_t hasStall;
-				uint16_t hasHaus;
+				uint8_t hasHaus;
+				uint8_t hasWeide;
 				uint16_t hasSchweine;
 				uint16_t hasChicken;
 				uint16_t hasCage;

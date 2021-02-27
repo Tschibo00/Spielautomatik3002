@@ -9,7 +9,7 @@ class TVGame: public Game {
 		char activeChannel = 0;
 		uint16_t frame = 0;
 		uint16_t oldFrame = 0;
-		char x1, y1, x2, y2;
+		char x1 = 0, y1 = 0, x2 = 3, y2 = 4;
 		char riff[4];
 		char fische[5];
 

@@ -2,9 +2,10 @@
 
 static const uint8_t faces[60] = { 3, 15, 15, 3, 15, 15, 15, 15, 15, 1, 1, 15, 1, 15, 15, 1, 15, 15, 15, 15, 3, 15, 15, 3, 15, 15, 15, 15,
 		15, 15, 15, 15, 1, 1, 1, 1, 15, 15, 15, 15, 3, 15, 15, 3, 15, 15, 15, 15, 15, 15, 15, 15, 1, 15, 15, 1, 15, 1, 1, 15 };
-static const uint8_t goods[100] = { 15, 15, 15, 15, 15, 0, 0, 15, 15, 0, 0, 15, 15, 0, 0, 15, 15, 15, 15, 15, 0, 0, 15, 0, 0, 15, 15, 15,
+static const uint8_t goods[120] = { 15, 15, 15, 15, 15, 0, 0, 15, 15, 0, 0, 15, 15, 0, 0, 15, 15, 15, 15, 15, 0, 0, 15, 0, 0, 15, 15, 15,
 		15, 15, 15, 15, 15, 5, 5, 15, 15, 15, 15, 15, 3, 3, 3, 3, 3, 0, 0, 3, 3, 0, 0, 3, 3, 3, 3, 3, 3, 0, 0, 3, 3, 3, 3, 3, 3, 0, 0, 3, 3,
-		0, 0, 3, 3, 0, 0, 3, 3, 3, 3, 3, 15, 15, 15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15, 15, 15, 0 };
+		0, 0, 3, 3, 0, 0, 3, 3, 3, 3, 3, 15, 15, 15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15, 15, 15, 0, 15, 15, 15, 15, 15, 3, 3, 15,
+		15, 3, 3, 15, 15, 3, 3, 15, 15, 15, 15, 15 };
 static const uint8_t tierBild[100] = { 0, 0, 0, 3, 0, 0, 0, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5,
 		5, 0, 5, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 15, 15, 15, 15, 0, 0, 15, 0, 0, 0, 0, 7, 0, 0, 7, 7, 7, 7, 7, 7,
 		7, 7, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 5, 5, 0, 0, 0, 5, 0, 0 };
@@ -50,7 +51,7 @@ void FarmGame::play(){
 					case STALL:
 						sprintf(text, " : %d ; %d", g.cows, g.sheep);
 						break;
-					case CAGE:
+					case HAUS_OG:
 						sprintf(text, " > %d", g.birds);
 						break;
 					case CHICKEN:
@@ -228,7 +229,7 @@ void FarmGame::play(){
 		case 3:
 			if (globalState == KAUFEN || globalState == VERKAUFEN || globalState == FUETTERN) {
 				kaufState--;
-				if (state == FARM && kaufState < STALL) kaufState = SCHWEINE;
+				if (state == FARM && kaufState < STALL) kaufState = WEIDE;
 				if ((onMarktFutter() || onMarktTiere()) && kaufState < KUH) kaufState = VOGEL;
 				if (state == STALL && kaufState < KUH) kaufState = SCHAF;
 				if (state == HAUS_OG || state == CAGE) kaufState = VOGEL;
@@ -250,7 +251,7 @@ void FarmGame::play(){
 				case VERKAUFEN:
 				case FUETTERN:
 					kaufState++;
-					if (state == FARM && kaufState > SCHWEINE) kaufState = STALL;
+					if (state == FARM && kaufState > WEIDE) kaufState = STALL;
 					if ((onMarktFutter() || onMarktTiere()) && kaufState > VOGEL) kaufState = KUH;
 					if (globalState == VERKAUFEN && kaufState > HUHN) kaufState = KUH;
 					if (state == STALL && kaufState > SCHAF) kaufState = KUH;
@@ -273,8 +274,8 @@ void FarmGame::play(){
 					if (state == FARM && posX == 14) {
 						if (!tierImStall()) {
 							totalTiere = 0;
-							initTiere(g.cows, KUH, 15, 3, 6 + g.hasStall, 6 + g.hasStall);
-							initTiere(g.sheep, SCHAF, 15, 3, 6 + g.hasStall, 6 + g.hasStall);
+							initTiere(g.cows, KUH, 15, 3, 6 + g.hasWeide, 6 + g.hasWeide);
+							initTiere(g.sheep, SCHAF, 15, 3, 6 + g.hasWeide, 6 + g.hasWeide);
 						}
 						enter(globalState, WEIDE, posX, posY);
 					}
@@ -335,12 +336,15 @@ void FarmGame::play(){
 					break;
 				case KAUFEN:
 					if (state == FARM) {
+						uint16_t currentSize;
 						switch (kaufState) {
 							case STALL:
 								productKaufen(&g.hasStall, getPriceFarm(kaufState), 1);
 								break;
 							case HAUS:
-								productKaufen(&g.hasHaus, getPriceFarm(kaufState), 1);
+								currentSize = g.hasHaus;
+								productKaufen(&currentSize, getPriceFarm(kaufState), 1);
+								g.hasHaus = currentSize;
 								break;
 							case CAGE:
 								if (g.hasHaus) productKaufen(&g.hasCage, getPriceFarm(kaufState), 1);
@@ -350,6 +354,11 @@ void FarmGame::play(){
 								break;
 							case SCHWEINE:
 								productKaufen(&g.hasSchweine, getPriceFarm(kaufState), 1);
+								break;
+							case WEIDE:
+								currentSize = g.hasWeide;
+								productKaufen(&currentSize, getPriceFarm(kaufState), 1);
+								g.hasWeide = currentSize;
 								break;
 						}
 						updateSaveGame();
@@ -548,7 +557,7 @@ void FarmGame::showFarm(){
 			// weide
 			drawLine(rx(13), ry(6), 1, 0, 3, 15);
 			drawLine(rx(13), ry(8), 1, 0, 3, 15);
-			drawRectangle(rx(15), ry(2), 9 + g.hasStall, 9 + g.hasStall, 15);
+			drawRectangle(rx(15), ry(2), 9 + g.hasWeide, 9 + g.hasWeide, 15);
 			set(rx(15), ry(7), 1);
 			// schweine
 			if (g.hasSchweine) {
@@ -895,6 +904,8 @@ uint16_t FarmGame::getPriceFarm(char product){
 			return 50;
 		case SCHWEINE:
 			return 200;
+		case WEIDE:
+			return 1;
 	}
 }
 
@@ -924,6 +935,12 @@ char FarmGame::getHappiness(){
 	happiness += g.sheepFed ? 1 : -1;
 	happiness += g.chickenFed ? 1 : -1;
 	happiness += g.birdsFed ? 1 : -1;
+	if (g.hasStall
+			&& ((g.cows + g.sheep) * 4 > (g.hasStall + 6) * (g.hasStall + 6) || (g.cows + g.sheep) * 4 > (g.hasWeide + 6) * (g.hasWeide + 6)))
+		happiness--;
+	if (g.hasSchweine && g.pigs * 4 > (g.hasSchweine + 6) * (g.hasSchweine + 6)) happiness--;
+	if (g.hasChicken && g.chicken * 4 > (g.hasChicken + 6) * (g.hasChicken + 6)) happiness--;
+	if (g.hasCage && g.birds * 4 > (g.hasCage + 6) * (g.hasCage + 6)) happiness--;
 	return happiness < -1 ? -1 : happiness > 1 ? 1 : 0;
 }
 
@@ -940,6 +957,7 @@ void FarmGame::selectPlayer(uint8_t player, bool resetSavedGame){
 		g.day = 1;
 		g.hasStall = 1;
 		g.hasHaus = 0;
+		g.hasWeide = 0;
 		g.hasSchweine = 0;
 		g.hasChicken = 0;
 		g.hasCage = 0;
@@ -964,24 +982,29 @@ void FarmGame::selectPlayer(uint8_t player, bool resetSavedGame){
 		g.chickenProduct = 0;
 	}
 	currentPlayer = player;
-
 	/*
 
+	 Serial.println("selected");
 	 Serial.println(currentPlayer);
 	 Serial.println(resetSavedGame);
+	 Serial.println("money");
 	 Serial.println(g.money);
 	 Serial.println(g.day);
 	 Serial.println(g.daytime);
+	 Serial.println("gebaeude");
 	 Serial.println(g.hasStall);
 	 Serial.println(g.hasHaus);
+	 Serial.println(g.hasWeide);
 	 Serial.println(g.hasSchweine);
 	 Serial.println(g.hasChicken);
 	 Serial.println(g.hasCage);
+	 Serial.println("tiere");
 	 Serial.println(g.cows);
 	 Serial.println(g.pigs);
 	 Serial.println(g.sheep);
 	 Serial.println(g.chicken);
 	 Serial.println(g.birds);
+	 Serial.println("futter");
 	 Serial.println(g.cowsFood);
 	 Serial.println(g.pigsFood);
 	 Serial.println(g.sheepFood);
@@ -992,11 +1015,13 @@ void FarmGame::selectPlayer(uint8_t player, bool resetSavedGame){
 	 Serial.println(g.sheepFed);
 	 Serial.println(g.chickenFed);
 	 Serial.println(g.birdsFed);
+	 Serial.println("products");
 	 Serial.println(g.cowsProduct);
 	 Serial.println(g.sheepProduct);
 	 Serial.println(g.pigsProduct);
 	 Serial.println(g.chickenProduct);
 	 */
+
 }
 /*
  * Peters Stand
