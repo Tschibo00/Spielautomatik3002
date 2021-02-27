@@ -1,6 +1,6 @@
 #include "KeyboardController.h"
 
-#define DEBOUNCE 30		// ms for debounce, increase for longer debounce period
+#define DEBOUNCE 100		// ms for debounce, increase for longer debounce period
 
 int keyLatchPin[3] = { 9, 8, 7 };
 int keyMatrixPin[4] = { 10, 12, A4, A5 };

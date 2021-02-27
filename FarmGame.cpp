@@ -104,10 +104,29 @@ void FarmGame::play(){
 				if (state == FARM) {
 					copy(goods + (kaufState - STALL) * 20);
 					if (getPriceFarm(kaufState) > g.money) canTrade = false;
+					if (kaufState == HAUS && g.hasHaus) canTrade = false;
+					if (kaufState == WEIDE && g.hasWeide == 255) canTrade = false;
 				}
 				if (onMarktFutter()) {
 					copy(tierBild + kaufState * 20);
 					if (getPriceFutter(kaufState) > g.money) canTrade = false;
+					switch (kaufState) {
+						case KUH:
+							if (g.cows >= 200) canTrade = false;
+							break;
+						case SCHAF:
+							if (g.sheep >= 200) canTrade = false;
+							break;
+						case SCHWEIN:
+							if (g.pigs >= 200) canTrade = false;
+							break;
+						case HUHN:
+							if (g.chicken >= 200) canTrade = false;
+							break;
+						case VOGEL:
+							if (g.birds >= 200) canTrade = false;
+							break;
+					}
 				}
 				if (onMarktTiere()) {
 					copy(tierBild + kaufState * 20);
@@ -342,9 +361,11 @@ void FarmGame::play(){
 								productKaufen(&g.hasStall, getPriceFarm(kaufState), 1);
 								break;
 							case HAUS:
-								currentSize = g.hasHaus;
-								productKaufen(&currentSize, getPriceFarm(kaufState), 1);
-								g.hasHaus = currentSize;
+								if (g.hasHaus == 0) {
+									currentSize = g.hasHaus;
+									productKaufen(&currentSize, getPriceFarm(kaufState), 1);
+									g.hasHaus = currentSize;
+								}
 								break;
 							case CAGE:
 								if (g.hasHaus) productKaufen(&g.hasCage, getPriceFarm(kaufState), 1);
@@ -356,9 +377,11 @@ void FarmGame::play(){
 								productKaufen(&g.hasSchweine, getPriceFarm(kaufState), 1);
 								break;
 							case WEIDE:
-								currentSize = g.hasWeide;
-								productKaufen(&currentSize, getPriceFarm(kaufState), 1);
-								g.hasWeide = currentSize;
+								if (g.hasWeide < 255) {
+									currentSize = g.hasWeide;
+									productKaufen(&currentSize, getPriceFarm(kaufState), 1);
+									g.hasWeide = currentSize;
+								}
 								break;
 						}
 						updateSaveGame();
@@ -367,19 +390,19 @@ void FarmGame::play(){
 						bool bought = false;
 						switch (kaufState) {
 							case KUH:
-								if (g.hasStall) bought = productKaufen(&g.cows, getPriceTier(kaufState), 1);
+								if (g.hasStall && g.cows < 200) bought = productKaufen(&g.cows, getPriceTier(kaufState), 1);
 								break;
 							case SCHAF:
-								if (g.hasStall) bought = productKaufen(&g.sheep, getPriceTier(kaufState), 1);
+								if (g.hasStall && g.sheep < 200) bought = productKaufen(&g.sheep, getPriceTier(kaufState), 1);
 								break;
 							case SCHWEIN:
-								if (g.hasSchweine) bought = productKaufen(&g.pigs, getPriceTier(kaufState), 1);
+								if (g.hasSchweine && g.pigs < 200) bought = productKaufen(&g.pigs, getPriceTier(kaufState), 1);
 								break;
 							case HUHN:
-								if (g.hasChicken) bought = productKaufen(&g.chicken, getPriceTier(kaufState), 1);
+								if (g.hasChicken && g.chicken < 200) bought = productKaufen(&g.chicken, getPriceTier(kaufState), 1);
 								break;
 							case VOGEL:
-								if (g.hasCage) bought = productKaufen(&g.birds, getPriceTier(kaufState), 1);
+								if (g.hasCage && g.birds < 200) bought = productKaufen(&g.birds, getPriceTier(kaufState), 1);
 								break;
 						}
 						updateSaveGame();
@@ -935,8 +958,8 @@ char FarmGame::getHappiness(){
 	happiness += g.sheepFed ? 1 : -1;
 	happiness += g.chickenFed ? 1 : -1;
 	happiness += g.birdsFed ? 1 : -1;
-	if (g.hasStall
-			&& ((g.cows + g.sheep) * 4 > (g.hasStall + 6) * (g.hasStall + 6) || (g.cows + g.sheep) * 4 > (g.hasWeide + 6) * (g.hasWeide + 6)))
+	if (g.hasStall								// animals need at least 4 bubbel each to be happy
+	&& ((g.cows + g.sheep) * 4 > (g.hasStall + 6) * (g.hasStall + 6) || (g.cows + g.sheep) * 4 > (g.hasWeide + 6) * (g.hasWeide + 6)))
 		happiness--;
 	if (g.hasSchweine && g.pigs * 4 > (g.hasSchweine + 6) * (g.hasSchweine + 6)) happiness--;
 	if (g.hasChicken && g.chicken * 4 > (g.hasChicken + 6) * (g.hasChicken + 6)) happiness--;
