@@ -480,13 +480,23 @@ void FarmGame::play(){
 			}
 			break;
 		case 0:
-			if ((g.daytime == 1 || g.daytime == 3) && g.cowsFed && state == STALL) g.cowsProduct += g.cows;
-			if (g.daytime == 2 && g.sheepFed && state == STALL) g.sheepProduct += g.sheep;
-			if (g.daytime == 1 && g.pigsFed && state == SCHWEINE) {
+			if ((g.daytime == 1 || g.daytime == 3) && g.cowsFed && state == STALL && !cowsHarvested) {
+				g.cowsProduct += g.cows;
+				cowsHarvested = true;
+			}
+			if (g.daytime == 2 && g.sheepFed && state == STALL && !sheepHarvested) {
+				g.sheepProduct += g.sheep;
+				sheepHarvested = true;
+			}
+			if (g.daytime == 1 && g.pigsFed && state == SCHWEINE && !pigsHarvested) {
 				g.pigsProduct++;
 				g.pigs--;
+				pigsHarvested = true;
 			}
-			if (g.daytime == 4 && g.chickenFed && state == CHICKEN) g.chickenProduct += g.chicken;
+			if (g.daytime == 4 && g.chickenFed && state == CHICKEN && !chickenHarvested) {
+				g.chickenProduct += g.chicken;
+				chickenHarvested = true;
+			}
 			updateSaveGame();
 			break;
 		case 10:
@@ -799,6 +809,10 @@ void FarmGame::increaseDayTime(){
 		g.chickenFed = false;
 		g.birdsFed = false;
 	}
+	cowsHarvested = false;
+	sheepHarvested = false;
+	pigsHarvested = false;
+	chickenHarvested = false;
 }
 
 void FarmGame::productVerkaufen(uint16_t *product, uint16_t price){

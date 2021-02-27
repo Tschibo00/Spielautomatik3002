@@ -48,6 +48,10 @@ class FarmGame: public Game {
 		char *tierPosX = NULL, *tierPosY = NULL, *tierType = NULL;
 		uint16_t totalTiere = 0;
 		int16_t tierMinX = 0, tierMaxX = 0, tierMinY = 0, tierMaxY = 0;
+		bool cowsHarvested = false;
+		bool sheepHarvested = false;
+		bool pigsHarvested = false;
+		bool chickenHarvested = false;
 
 		struct SaveGame {
 				unsigned long money;

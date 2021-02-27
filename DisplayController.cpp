@@ -144,14 +144,19 @@ void drawFade(char c0, char c1, char c2, char c3, char c4){
 }
 
 void set(int x, int y, char color){
-	if ((x >= 0) && (x < 4) && (y >= 0) && (y < 5)) screen[y * 4 + x] = color;
+	if (x >= 0 && x < 4 && y >= 0 && y < 5 && color >= 0 && color < 16) screen[y * 4 + x] = color;
 }
 
 char get(int x, int y){
-	if ((x >= 0) && (x < 4) && (y >= 0) && (y < 5))
+	if (x >= 0 && x < 4 && y >= 0 && y < 5)
 		return screen[y * 4 + x];
 	else
 		return -1;
+}
+
+void fade(char steps){
+	for (char i = 0; i < 20; i++)
+		screen[i] = screen[i] >> steps;
 }
 
 void strike(){

@@ -7,6 +7,11 @@ class TVGame: public Game {
 	private:
 		unsigned long start = 0;
 		char activeChannel = 0;
+		uint16_t frame = 0;
+		uint16_t oldFrame = 0;
+		char x1, y1, x2, y2;
+		char riff[4];
+		char fische[5];
 
 		void drawChannel0();
 		void drawChannel1();
