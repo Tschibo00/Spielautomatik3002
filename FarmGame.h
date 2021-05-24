@@ -29,7 +29,7 @@
 #define HUHN 3
 #define VOGEL 4
 
-#define MAX_TIER 90		// shouldn't be more than 100 to avoid memory problems
+#define MAX_TIER 20		// shouldn't be more than 100 to avoid memory problems
 
 class FarmGame: public Game {
 	private:

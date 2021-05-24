@@ -8,11 +8,11 @@
 #include "AsteroidGame.h"
 #include "FarmGame.h"
 #include "LabyrinthGame.h"
-#include "ToneTest.h"
-#include "WuerfelGame.h"
+//#include "ToneTest.h"
+#include "MarioGame.h"
 #include "FlappyGame.h"
 #include "WallGame.h"
-#include "TVGame.h"
+//#include "TVGame.h"
 #define GAME_COUNT 8
 
 Game *runningGame = NULL;
@@ -21,14 +21,14 @@ int currentGame = -1;
 char selectedPlayer = 0;
 bool resetPlayer = false;
 
-static const uint8_t icons[8][20] = { { 0, 15, 15, 0, 15, 0, 0, 15, 15, 0, 0, 15, 15, 0, 0, 15, 0, 15, 15, 0 },		// wuerfel
+static const uint8_t icons[8][20] = { { 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 1, 1, 1, 1, 1, 1, 8, 1 },		// mario
 		{ 7, 15, 3, 7, 0, 0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 15, 0 },				// asteroid
 		{ 15, 15, 15, 15, 0, 0, 0, 15, 15, 15, 3, 15, 15, 0, 0, 15, 15, 0, 15, 15 },	// labyrinth
 		{ 15, 15, 15, 15, 15, 0, 0, 15, 15, 0, 0, 15, 15, 0, 0, 15, 15, 0, 15, 15 },	// farm
 		{ 0, 2, 0, 0, 0, 0, 5, 0, 1, 3, 7, 15, 0, 0, 5, 0, 0, 2, 0, 0 }, 					// flappy
-		{ 0, 0, 0, 0, 8, 8, 8, 8, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0 },					// wall
-		{ 15, 15, 15, 15, 15, 1, 3, 15, 15, 3, 1, 15, 15, 15, 15, 15, 8, 0, 0, 8 },	// TV
-		{ 0, 0, 0, 15, 7, 1, 15, 15, 15, 15, 15, 15, 7, 1, 15, 15, 0, 0, 0, 15 }		// tonetest
+		{ 0, 0, 0, 0, 8, 8, 8, 8, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0 }//,					// wall
+//		{ 15, 15, 15, 15, 15, 1, 3, 15, 15, 3, 1, 15, 15, 15, 15, 15, 8, 0, 0, 8 },	// TV
+	//	{ 0, 0, 0, 15, 7, 1, 15, 15, 15, 15, 15, 15, 7, 1, 15, 15, 0, 0, 0, 15 }		// tonetest
 };
 
 void initGameController(){
@@ -43,7 +43,7 @@ void selectGame(int game){
 void initGame(int game){
 	switch (game) {
 		case 0:
-			runningGame = new WuerfelGame();
+			runningGame = new MarioGame();
 			break;
 		case 1:
 			runningGame = new AsteroidGame();
@@ -60,12 +60,12 @@ void initGame(int game){
 		case 5:
 			runningGame = new WallGame();
 			break;
-		case 6:
+/*		case 6:
 			runningGame = new TVGame();
 			break;
 		case 7:
 			runningGame = new ToneTest();
-			break;
+			break;*/
 	}
 	if (runningGame->needsPlayerSelection())
 		state = GAME_PLAYER_SELECTION;
